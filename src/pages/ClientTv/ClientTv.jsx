@@ -6,11 +6,14 @@ import io from 'socket.io-client';
 import notificationAudio from "../../assets/audios/notificacion.mp3";
 import "./ClientTv.css";
 
-import bell from "../../assets/icons/bell.svg";
-import meco from "../../assets/images/meco.png"
+// import bell from "../../assets/icons/bell.svg";
+import bell from "./bell.svg";
+// import meco from "../../assets/images/meco.png"
+import meco from "./meco.png"
 
 // Weather API
-import clouds from "../../assets/images/clouds.svg";
+// import clouds from "../../assets/images/clouds.svg";
+import clouds from "./clouds.svg";
 
 import axios from 'axios';
 import {endpointGetArraySecuenceEndpoint} from "../../api/api.js"
@@ -222,6 +225,10 @@ function Clienttv() {
 
 
     const socket = io(API_URI);
+    // 'wss://www.hotelmeqo.com/server-calls-tv
+    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv:3100');
+    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv');
+    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv:3100', {path: '/server-calls-tv/socket.io'});
 
     console.log("Intentando conectar...");
 

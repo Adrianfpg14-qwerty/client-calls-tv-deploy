@@ -563,7 +563,7 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
           <div className='containerAddingFiles' ref={containerAddingFilesRef}>
             <div className='inputDiv' ref={inputDivRef}>
               <img src={uploadCloud} />
-              <input type="file" accept="image/jpg, image/png, image/jpeg, video/mp4" multiple ref={inputRef} onChange={handleSelectFiles} />
+              <input type="file" accept="image/jpg, image/png, image/jpeg, image/*, video/mp4" multiple ref={inputRef} onChange={handleSelectFiles} />
             </div>
 
             <div className='divContainerPreviews'f>
