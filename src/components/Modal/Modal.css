@@ -1,0 +1,124 @@
+.modalStyles {
+  background-color: rgba(123, 123, 123, 0.8);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 90vh;
+  height: 100vh;
+
+  margin-left: 85px;
+  /* margin-top: 8%; */
+
+  z-index: 50;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding-top: 100px;
+}
+
+
+.infoModal {
+  z-index: 60;
+
+  background-color: rgb(41, 66, 71);
+  width: 350px;
+  height: 180px;
+
+  border-radius: 10px;
+
+  
+}
+
+.modalHeaderP {
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+  color: white;
+}
+
+
+.modalHeader {
+  padding-top: 15px;
+  padding-left: 15px;
+}
+
+.modalBody {
+  padding: 15px;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-items: flex-start;
+  align-items: flex;
+}
+
+.nameFolderOnModalInput {
+  border: 10px solid white;
+}
+
+.buttons {
+  margin-top: 15px;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: flex-start;
+
+  gap: 10px
+}
+
+
+
+.btnStylesForBtnCancelar {
+  width: 100px;
+  padding: 3px 8px 3px 5px;
+}
+
+
+.btnOnModal {
+  width: 100px;
+  
+}
+
+.btnStylesForBtnCrear {
+  width: 100px;
+  padding: 3px 8px 3px 5px;
+  /* background-color: #095ddb;  */
+  background-color: #ccc; 
+  border-radius: 5px;
+
+}
+.btnStylesForBtnCancelar {
+  width: 100px;
+  padding: 3px 8px 3px 5px;
+  background-color: #095ddb; 
+  border-radius: 5px;
+  cursor: pointer;
+
+}
+
+.deshabilitadoOnModal:hover {
+  background-color: #ccc;
+  color: black;
+}
+
+
+.habilitadoOnModal {
+  background-color: #178b55; 
+}
+
+.habilitadoOnModal:hover {
+  background-color: #11be6d;
+}
+
+
+
+
+.habilitado:hover {
+  cursor: pointer;
+}

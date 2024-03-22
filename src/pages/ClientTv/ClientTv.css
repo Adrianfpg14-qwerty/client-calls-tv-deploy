@@ -1,0 +1,362 @@
+/* -------------- GETTING READY -------------- */
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.allContainer {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+
+  background-color: #88b3ba; 
+}
+
+
+
+
+
+
+/* -------------- IMAGE -------------- */
+.imgRef {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-fit: cover;
+}
+
+
+
+
+
+
+
+/* -------------- TIME ZONE -------------- */
+.containerTempTime {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  width: 520px;
+  height: 120px;
+
+  border: 1px solid;
+  border-radius: 20px;
+  
+  background: rgb(66, 65, 65);
+  border: 1px solid rgba(92, 92, 99);
+  color: white;   
+  
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+
+  z-index: 20;
+
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.7); */
+}
+
+
+
+.temperatura {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  align-items: center;
+
+  margin: 10px;
+}
+
+.time {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
+  margin: 10px;
+}
+
+.separador {
+  border: 1px solid white;
+  height: 80%;
+}
+
+
+
+/* ITEMS */
+.temperatura-img {
+  position: relative;
+  width: 70px;
+  height: 70px;
+}
+.temperatura-grade {
+  /* font-family: 'Times New Roman', Times, serif; */
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+  font-size: 50px;
+  
+  margin-left: 5px;
+}
+.temperatura-grade-number {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+  /* font-size: 60px; */
+  font-size: 80px;
+  
+  margin-left: 5px;
+}
+.temperatura-grade-symbol {
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 200;
+  font-style: normal;
+  /* font-size: 60px; */
+  font-size: 80px;
+  
+  margin-left: 5px;
+}
+
+
+/* ITEMS */
+.time-hour {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 500;
+  /* font-size: 60px; */
+  font-size: 70px;
+  font-style: normal;
+}
+.time-date {  
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 100;
+  /* font-size: 14px; */
+  font-size: 18px;
+  font-style: normal;
+
+  position: relative;
+  bottom: 15px;
+}
+
+
+
+
+
+
+/* ------------ MECO ------------ */
+
+
+.mecoRef {
+  position: absolute;
+  bottom: 300px;
+  right: 240px;
+
+  height: 400px;
+
+  /* animation: mecoAnimacion 3s infinite; */
+  /* animation: mecoAnimacion 3s infinite; */
+  transform: scale(0) rotate(0deg);
+}
+
+@keyframes mecoAnimacion {
+  from {
+    transform: rotate(8deg) scale(1);
+  }
+  50% {
+    transform: rotate(-5deg) scale(1.1);
+  }
+  to {
+    transform: rotate(8deg) scale(1);
+  }
+}
+
+@keyframes mecoAnimacionOld {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(5deg) scale(1.1);
+  }
+  to {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+
+/* ------------ CALL PATIENT ------------ */
+.callPatient {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  
+  background-color: rgb(133, 206, 59);
+  border: 1px solid black;
+  width: 120px;
+  height: 50px;
+
+
+  border-radius: 12px;
+
+  font-size: 20px;
+  cursor: pointer;
+}
+
+
+
+
+
+
+/* -------- NOTIFICATION -------- */
+.notification {
+  position: absolute;
+  bottom: 50px;
+  /* right: 50px; */
+  right: -800px;
+
+  /* width: 650px; */
+
+
+  /* width: 34vw; */
+  /* width: 674px; */
+  min-width: 674px;
+  height: 180px;
+  background-color: aliceblue;
+  border-radius: 30px;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+
+  padding: 20px;
+
+  /* animation: notificationAnimantion 2s infinite alternate ease-in-out; */
+  /* transition: all 2s ease-in-out; */
+}
+
+.notification-symbol-container {
+  width: 80px;
+  height: 80px;
+
+  border-radius: 50%;
+  background-color: rgb(55, 241, 55);
+  border: 1px solid black;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+
+  margin-right: 15px;
+}
+
+.notification-symbol {
+  width: 90%;
+}
+
+.notification-names-container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  /* background-color: wheat; */
+
+  font-family: "Fira Sans", sans-serif;
+  font-size: 3em;
+  /* width: 500px; */
+  min-width: 500px;
+  margin-right: 10px;
+  /* background-color: aqua; */
+  height: 100%;
+}
+
+
+.namePatient {
+  font-weight: 600;
+}
+.nameConsultorio {
+  font-weight: 400;
+}
+
+.aBr {
+  border: 1px solid black;
+  width: 90%;
+  margin-top:     5px;
+  margin-bottom:  5px;
+}
+
+@keyframes notificationAnimantion {
+  from {
+    transform: translateX(800px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+
+
+
+
+
+/* VIDEO */
+.video {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* background-color: #88b3ba;  */
+}
+
+.cortina {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  background-color: rgba(0, 0, 0, 0);
+  /* transition: background-color, 1s ease-in; */
+}
+
+.btnStartVideos {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+  
+  background-color: rgb(133, 206, 59);
+  border: 1px solid black;
+  width: 120px;
+  height: 50px;
+
+
+  border-radius: 12px;
+
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.btnSincronizeTime {
+  position: absolute;
+  top: 20px;
+  left: 280px;
+  z-index: 2;
+  
+  background-color: rgb(133, 206, 59);
+  border: 1px solid black;
+  width: 120px;
+  height: 50px;
+
+
+  border-radius: 12px;
+
+  font-size: 20px;
+  cursor: pointer;
+}
+

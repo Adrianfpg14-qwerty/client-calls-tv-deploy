@@ -1,0 +1,328 @@
+.timeLineDiv {
+  width: 100%;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+
+  gap: 30px;
+
+  /* background-color: red; */
+}
+
+
+
+
+
+
+
+
+
+.selectFiles {
+  
+  background-color: #295458;
+  width: 380px;
+  height: 500px;
+
+  border-radius: 10px;
+  
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+.line-selectFiles{
+  width: 380px;
+
+  border-radius: 10px;
+  
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: center;
+
+
+
+  
+
+  height: 480px;
+}
+
+
+.carpetasHeader {
+  width: 100%;
+  height: 40px;
+
+  /* border: 2px solid rgb(94, 89, 89); */
+  /* border-radius: 5px; */
+
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: rgb(54, 147, 173);
+
+  color: white;
+  font-size: 30px;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.line-carpetasHeader {
+  background-color: rgb(24, 76, 91);
+}
+
+
+.folderContenedor {
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+
+  /* border-radius: 5px; */
+  border: 4px solid #afafaf;
+
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  /* background-color: blue; */
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.line-folderContenedor {
+  height: 100%;
+  background-color: #2a617d;
+}
+
+.folderContainer {
+  border: 2px solid rgb(158, 157, 157);
+  border-radius: 5px;
+
+  margin-bottom: 20px;
+
+  background-color: #959595;
+}
+
+.titleNameFolder {
+  background-color: rgb(89, 89, 89);
+  width: 100%;
+  height: 30px;
+  
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  color: black;
+
+  font-size: 20px;
+  font-weight: 500;
+}
+
+
+
+.itemsFolder {
+  padding: 10px;
+
+  position: relative;
+}
+
+.line-itemsFolder {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.forDrag {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid #333; */
+  /* border-radius: 12px; */
+}
+
+
+.itemFile {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+
+  /* margin-left: 10px;
+  margin-right: 10px; */
+
+  background-color: rgb(75, 99, 106);
+  border: 1px solid white;
+  border-radius: 5px;
+
+  margin-bottom: 10px;
+
+  cursor: pointer;
+
+  width: 100%;
+  height: 100%;
+}
+
+.imageItem {
+  /* width: 80px;
+  height: 80px; */
+
+  width: 70px;
+  height: 70px;
+  /* background-color: #fff; */
+
+  /* object-fit: contain; */
+  object-fit: cover;
+  
+  border: 2px solid #ccc;
+  border-radius: 5px;
+
+  margin: 10px;
+} 
+
+.nameItem {
+  font-size: 15px;
+  color: white;
+  
+  margin-left: 20px;
+}
+
+
+
+
+.container {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  /* background-color: blue; */
+  /* flex-wrap: wrap; */
+  /* width: 220px; */
+  /* justify-content: center; */
+}
+
+
+.imagesIconStyle {
+  width: 40px;
+  margin-left: 20px;
+  margin-top: 5px;
+
+  padding: 2px;
+  background-color: #bababa;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+
+
+.personalizedColor0 {
+  /* background-color: #41C9E2; */
+  border: 4px solid #41C9E2;
+}
+.personalizedColor1 {
+  /* background-color: #fa749e; */
+  border: 4px solid #fa749e;
+}
+.personalizedColor2 {
+  /* background-color: #7F27FF; */
+  border: 4px solid #7F27FF;
+}
+.personalizedColor3 {
+  /* background-color: #FFF455; */
+  border: 4px solid #FFF455;
+}
+.personalizedColor4 {
+  /* background-color: #15F5BA; */
+  border: 4px solid #15F5BA;
+}
+
+
+
+.buttonsAcciones {
+  /* background-color: red; */
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-items: flex-start;
+  align-items: center;
+
+  /* color: white; */
+
+}
+
+.buttonsAccion-A {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+
+.buttonsAction {
+  border-radius: 5px;
+  padding: 10px;
+
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin: 2px;
+
+  /* color: ; */
+}
+
+
+.btnAccept {
+  background-color: #095ddb; 
+}
+.btnCancel {
+  background-color: #5c626a; 
+}
+
+
+
+
+.deshabilitado {
+  background-color: #ccc;
+}
+
+.deshabilitado:hover {
+  background-color: #ccc;
+  color: black;
+}
+
+
+
+.habilitado:hover {
+  cursor: pointer;
+}
+
+
+
+.habilitadoAccept {
+  background-color: #095ddb; 
+}
+.habilitadoAccept:hover{
+  background-color: #0745a1; 
+}
+
+.habilitadoCancel {
+  background-color: rgb(144, 144, 144); 
+}
+.habilitadoCancel:hover {
+  background-color: rgb(107, 107, 107); 
+}
+
+
+.habilitadoSincronize {
+  background-color: #178b55; 
+}
+.habilitadoSincronize:hover {
+  background-color: #0f5333; 
+}
+

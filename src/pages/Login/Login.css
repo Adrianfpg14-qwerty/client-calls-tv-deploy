@@ -1,0 +1,98 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ocupa toda la altura de la ventana */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 320px; /* Ajusta según prefieras */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+div.inputs {
+  margin-bottom: 20px;
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  padding: 20px;
+  height: 30px;
+}
+
+button:hover {
+  background-color: #0056b3;
+  color: white;
+  /* width: 20px; */
+}
+
+
+.inputs {
+  /* display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between; */
+  
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+.submitLogin {
+  border: 2px solid #3c6da2;
+  border-radius: 5px;
+  background-color: #3c6da2;
+}
+
+.submitLogin:hover {
+  background-color: #0056b3;
+  color: white;
+}
+
+
+.inputs input {
+  /* display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center; */
+
+  height: 35px;
+  background-color: rgb(187, 222, 214);
+  border-radius: 10px;
+}
+
+.nameInputLogin {
+  width: 170px;
+}
+
+.passwordInputLogin {
+  width: 170px;
+}

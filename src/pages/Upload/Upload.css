@@ -1,0 +1,26 @@
+
+.containerVideo {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  justify-content: flex-start;
+  border: 1px solid black;
+  width: fit-content;
+}
+
+
+.divBtnContainer {
+  margin: 10px;
+}
+
+.btnDeleteVideo {
+  text-align: center;
+  color: white;
+
+  width: 30px;
+  height: 30px;
+  background-color: cornflowerblue;
+  border: 2px solid black;
+  margin: 10px;
+}

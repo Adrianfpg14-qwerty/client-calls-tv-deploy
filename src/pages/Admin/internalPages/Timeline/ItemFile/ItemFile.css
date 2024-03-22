@@ -1,0 +1,76 @@
+
+.box {
+  /* width: 160px;
+  height: 160px; */
+  position: relative;
+  width: 200px;
+  height: 80px;
+  border: 2px solid #333;
+  border-radius: 12px;
+}
+
+.box .image {
+  width: 100%;
+  height: 100%;
+  background-color: rgb(79, 164, 167);
+  background-size: cover;
+  border-radius: 10px;
+  background-position: center;
+  
+  cursor: pointer;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+
+  color: white;
+  font-size: 3em;
+}
+
+.box.hovered {
+  border: 2px dashed #333;
+}
+
+.hovered {
+  border: 2px dashed #333;
+}
+
+
+
+
+.itemFile {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+
+  /* margin-left: 10px;
+  margin-right: 10px; */
+
+  background-color: rgb(75, 99, 106);
+  border: 1px solid white;
+  border-radius: 5px;
+
+  margin-bottom: 10px;
+
+  cursor: pointer;
+
+  /* width: 100%;
+  height: 100%; */
+
+}
+.itemFile:hover {
+  background: #414141;
+}
+
+
+.dataContainer {
+  width: 150px;
+}
+
+
+.line-itemFile {
+  width: 250px;
+  height: 90px;
+}

@@ -1,0 +1,10 @@
+.folderContainers {
+  display: flex;
+  flex-flow: row wrap;
+
+  gap: 20px;
+}
+
+.folderinitnew {
+  padding-bottom: 12px;
+}
