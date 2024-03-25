@@ -29,7 +29,7 @@ const Login = () => {
         navigate('/clientTv');
       }
     } catch (error) {
-      console.error('Error en la petición:', error);
+      // console.error('Error en la petición:', error);
       console.log("Usuario no autenticado")
       alert("Usuario no autenticado")
     }
