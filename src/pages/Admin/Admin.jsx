@@ -19,7 +19,7 @@ import Tv from './internalPages/Tv/Tv';
 // Insides Internal Pages
 import InsideFolderComponent from '../../components/InsideFolderComponent/InsideFolderComponent';
 
-
+import Modal from '../../components/Modal/Modal';
 // import folders from "./info.js"
 
 
@@ -64,10 +64,23 @@ const Admin = () => {
   const [idBox, setIdBox] = useState("");
 
 
+  let createFolderOnRoot;
+  const [openModalOnRoot, setOpenModalOnRoot] = useState(false)
+  const handleOpenModalOnRoot = (createFolder) => {
+    let createFolderOnRoot = createFolder;
+
+    setOpenModalOnRoot(true);
+  }
+
+  const handleCloseModalOnRoot = () => {
+    setOpenModalOnRoot(false);
+  }
+
+
 
 
   return (
-    <div className="pageContainer">
+    <div className="pageContainer no-select">
     
       <div className="header">
 
@@ -130,7 +143,7 @@ const Admin = () => {
         <div className="content">
           {pageSelected === 1 && (
             // <Folder folders={folders} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected} setInfoFolder={setInfoFolder} setColorFolder={setColorFolder} />
-            <Folder setIdBox={setIdBox} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected} setInfoFolder={setInfoFolder} setColorFolder={setColorFolder} />
+            <Folder setIdBox={setIdBox} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected} setInfoFolder={setInfoFolder} setColorFolder={setColorFolder} handleOpenModalOnRoot={handleOpenModalOnRoot}/>
           )}
           {pageSelected === 2 && (
             // <Timeline folders={folders} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected}/>
@@ -152,6 +165,14 @@ const Admin = () => {
           )} */}
         </div>
       </div>
+
+      {
+        openModalOnRoot && (
+          <Modal handleCloseModal={handleCloseModalOnRoot} createFolder={createFolderOnRoot}/>
+        )
+      }
+      
+      
     </div>
   )
 }

@@ -411,7 +411,9 @@ const Timeline = ({folders}) => {
         <div className='carpetasHeader'>
           Carpetas
         </div>
-        <div className='folderContenedor'>
+        <div className='folderContenedor'
+          draggable="false" 
+        >
           {
             items.length > 0 && (
               items.map((folder, index) => (

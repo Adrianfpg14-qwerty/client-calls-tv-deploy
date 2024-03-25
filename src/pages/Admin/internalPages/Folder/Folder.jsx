@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import "./Folder.css"
 
 import Folderitem from '../../../../components/Folderitem/Folderitem.jsx'
-import Modal from '../../../../components/Modal/Modal.jsx'
+// import Modal from '../../../../components/Modal/Modal.jsx'
 
 import axios from 'axios'
 import {endpointFolders} from "../../../../api/api.js"
 import {endpointCreateFolders} from "../../../../api/api.js"
 
 
-const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder}) => {
+const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, handleOpenModalOnRoot}) => {
   
 
   const [items, setItems] = useState([])
@@ -54,28 +54,37 @@ const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder})
 
 
 
-  const [createFolderState, setCreateFolderState] = useState(false);
+  // const [createFolderState, setCreateFolderState] = useState(false);
 
-  const handleOpenModal = () => {
-    setCreateFolderState(true);
-  }
+  // const handleOpenModal = () => {
+  //   // setCreateFolderState(true);
 
+  //   handleOpenModalOnRoot(handleCloseModal,createFolder )
 
-
-  const handleCloseModal = () => {
-
-    setCreateFolderState(false);
-  }
-
-
-
+  //   // {
+  //   //   createFolderState && (
+  //   //     <Modal handleCloseModal={handleCloseModal} createFolder={createFolder} />
+  //   //   )
+  //   // }
+  // }
 
 
+
+  // const handleCloseModal = () => {
+
+  //   // setCreateFolderState(false);
+  // }
+
+
+
+
+  
 
   return (
       <div className='folder-init'>
         <div className="newItemContainer folderinitnew">
-          <input className="newItem" type="button" value="+ New" onClick={() => handleOpenModal()}/>
+          {/* <input className="newItem" type="button" value="+ New" onClick={() => handleOpenModal()}/> */}
+          <input className="newItem" type="button" value="+ New" onClick={() => handleOpenModalOnRoot(createFolder)}/>
         </div>
 
         <div className="folderContainers">
@@ -88,11 +97,11 @@ const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder})
           }
         </div>
 
-        {
+        {/* {
           createFolderState && (
             <Modal handleCloseModal={handleCloseModal} createFolder={createFolder} />
           )
-        }
+        } */}
 
       </div>
   )

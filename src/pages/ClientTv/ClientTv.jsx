@@ -6,14 +6,11 @@ import io from 'socket.io-client';
 import notificationAudio from "../../assets/audios/notificacion.mp3";
 import "./ClientTv.css";
 
-// import bell from "../../assets/icons/bell.svg";
-import bell from "./bell.svg";
-// import meco from "../../assets/images/meco.png"
-import meco from "./meco.png"
+import bell from "../../assets/icons/bell.svg"
+import meco from "../../assets/images/meco.png"
 
 // Weather API
-// import clouds from "../../assets/images/clouds.svg";
-import clouds from "./clouds.svg";
+import clouds from "../../assets/icons/clouds.svg";
 
 import axios from 'axios';
 import {endpointGetArraySecuenceEndpoint} from "../../api/api.js"
@@ -35,7 +32,10 @@ function getHoursMinutes(){
   if(!horaMilitar) {
     if(horasTemp >= 12 && horasTemp <= 23) {
       ampm = " PM";
-      horasTemp -= 12;
+      
+      if(horasTemp != 12){
+        horasTemp -= 12;
+      }
     }else {
       ampm = " AM";
     }
@@ -136,57 +136,6 @@ function getHoursMinutes(){
 
 
 
-
-  // --------- FUNCTIONS ------------
- 
-
-
-  // volumen video
-  // const bajarVolumen = () => {
-
-  //   if(videoRef.current.volume <= 0) return
-
-  //   const cambioGradualVolumen = 0.2;
-
-  //   const intervalo = setInterval(() => {
-
-  //     let actualVolumeToSet = videoRef.current.volume - cambioGradualVolumen
-
-  //     if(actualVolumeToSet >= 0 && actualVolumeToSet <= 0.2){
-  //       videoRef.current.volume = 0;
-  //       clearInterval(intervalo);
-  //     } else {
-  //       videoRef.current.volume = actualVolumeToSet;
-  //     }
-      
-  //     console.log(videoRef.current.volume)
-  //   }, (timeCambiandoVolume * 1000) / 5 );
-  // };
-
-  // const subirVolumen = () => {
-
-  //   if(videoRef.current.volume >= 1) return
-
-
-  //   const cambioGradualVolumen = 0.2;
-
-  //   const intervalo = setInterval(() => {
-
-  //     let actualVolumeToSet = videoRef.current.volume + cambioGradualVolumen
-
-  //     if(actualVolumeToSet >= 0.8 && actualVolumeToSet <= 1){
-  //       videoRef.current.volume = 1;
-  //       clearInterval(intervalo);
-  //     } else {
-  //       videoRef.current.volume = actualVolumeToSet;
-  //     }
-      
-  //     console.log(videoRef.current.volume)
-  //   }, (timeCambiandoVolume * 1000) / 5 );
-
-  // };
-
-
   let urlVideos = []
   let urlIndex = 0;
 
@@ -208,7 +157,7 @@ function Clienttv() {
 
       if(urlVideos.length == 0) return
 
-      setCurrentUrlVideo(urlVideos[urlIndex]);
+      setcurrentUrlImageVideo(urlVideos[urlIndex]);
 
     } catch (error) {
       console.error('Hubo un error al obtener el array secuence:', error);
@@ -216,68 +165,7 @@ function Clienttv() {
   }
 
 
-  // SOCKETs
-  useEffect(() => {
-
-    
-
-    fetchDataArraySecuence();
-
-
-    const socket = io(API_URI);
-    // 'wss://www.hotelmeqo.com/server-calls-tv
-    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv:3100');
-    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv');
-    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv:3100', {path: '/server-calls-tv/socket.io'});
-
-    console.log("Intentando conectar...");
-
-    socket.on('connect', () => {
-      console.log("Conectado");
-    });
-
-    socket.on('disconnect', () => {
-      console.log("Server desconectado");
-    });
-
-
-
-    
-    socket.on("call-on-tv", (data) => {
-      console.log(data)
-
-      setTimeout(()=>{
-        playAudio(data.objeto);
-      }, 1000)
-      
-      setCompleteName(data.objetoTexto.name.toUpperCase() + ' ' + data.objetoTexto.surname.toUpperCase());
-      setPlace(data.objetoTexto.place.toUpperCase());
-      showNotification();
-    
-    });
-
-    socket.on("sendingVideos", (data) => {
-      console.log(data.objeto)
-      // setUrlVideos(data.objeto)
-      urlVideos = data.objeto;
-      urlIndex = 0;
-      
-      if(urlVideos.length == 0) return
-
-      setCurrentUrlVideo(urlVideos[urlIndex]);
-      // videoRef.current.play();
-    })
-
-
-    // Limpieza al desmontar el componente
-    return () => {
-      socket.off('connect');
-      socket.off('disconnect');
-      socket.off('callPatient');
-      socket.disconnect();
-      console.log("Desconectado y listeners removidos.");
-    };
-  }, []);
+ 
  
 
 
@@ -285,12 +173,10 @@ function Clienttv() {
   const notification = useRef();
   const mecoRef = useRef();
   const cortinaRef = useRef();
-  const videoRef = useRef();
-
-  // URL VIDEOS
-  // const [urlVideos, setUrlVideos] = useState([]);
-  // const [urlIndex, setUrlIndex] = useState(0);
-  const [currentUrlVideo, setCurrentUrlVideo] = useState('');
+  const videoRef = useRef(null);
+  const imageRef = useRef(null)
+  
+  const [currentUrlImageVideo, setcurrentUrlImageVideo] = useState(null);
 
   // NAME
   const [completeName, setCompleteName] = useState('')
@@ -298,65 +184,53 @@ function Clienttv() {
 
   
    // FECHA
-   const [day, setDay] = useState(diaDelMes)
-   const [dayOfTheWeek, setDayOfTheWeek] = useState(diasDeLaSemana[diaDeSemana])
-   const [month, setMonth] = useState(mesesDelAnho[mesDelAnho])
-   
-   // HORA
-   const [horas, setHoras] = useState(getHoursMinutes()[0])
-   const [minutos, setMinutos] = useState(getHoursMinutes()[1])
+  const [day, setDay] = useState(diaDelMes)
+  const [dayOfTheWeek, setDayOfTheWeek] = useState(diasDeLaSemana[diaDeSemana])
+  const [month, setMonth] = useState(mesesDelAnho[mesDelAnho])
+  
+  // HORA
+  const [horas, setHoras] = useState(getHoursMinutes()[0])
+  const [minutos, setMinutos] = useState(getHoursMinutes()[1])
  
  
-
-
-  // 
   // VIDEOS
-  // const urlsVideos = videosWebm.urlVideos;
-  // const urlsVideos = videosMp4.urlVideos;
-  // const [urlIndex, setUrlIndex] = useState(0);
 
   // ---------------------------- HANDLERS ----------------------------
   function handleUrlChange () {
-    // if(urlVideos.length == 1){
-    //   console.log(true)
-    //   setUrlIndex(0)
-    //   handlePlay()
-    //   return
-    // }
 
-    // urlIndex == urlVideos.length - 1
-    //     ? setUrlIndex(0)
-    //     : setUrlIndex(urlIndex + 1);
     if(onNotification == true) {
+
       setTimeout(() => {
         handleUrlChange()
-      }, 1000)
+      }, 3000)
+
     } else {
+
+      if(urlVideos.length == 0) return
+
       if(urlIndex == urlVideos.length - 1){
         urlIndex = 0
       } else {
         urlIndex += 1
       }
       
-      setCurrentUrlVideo(urlVideos[urlIndex])
-  
-      if(currentUrlVideo.type.startsWith("video")){
-        setTimeout(()=>{
-          videoRef.current.play();
-        // }, 1000)
-        }, 1000);
-      }
+      setcurrentUrlImageVideo(urlVideos[urlIndex])
+
     }
 
-    
-
   };
+
+
   function handlePlay () {
+      // terminar transicion
+
       // videoRef.current.play()
       // console.log("Starting video");
   };
   function handleEnd () {
       // console.log("Ending video");
+      // iniciar transicion
+
       handleUrlChange();
   };
 
@@ -394,37 +268,13 @@ function Clienttv() {
 
     showCortina();
     
-    // videoRef.current.pause();
+    if(currentUrlImageVideo.type.startsWith("video")){
+      videoRef.current.pause();
+    }
 
-    // if(urlVideos[urlIndex].type.startsWith("video")){
-      try {
-        videoRef.current.pause();
-      } catch (error) {
-        
-      }
 
-    // }
-
-    setTimeout(() => {
-      // if(urlVideos[urlIndex].type.startsWith("video")){
-        try {
-          videoRef.current.play();
-        } catch (error) {
-        
-        }
-      // }
-    }, (timeShow * 1000) + (timeWait * 1000))
-
-    // if(sePausaOno){
-
-    // } else {
-    //   bajarVolumen();
-
-    //   setTimeout(() => {
-    //     subirVolumen();
-    //   }, (timeShow * 1000) + (timeWait * 1000))
-    // }
     
+
 
     // NOTIFICACION
     notification.current.style.transition = `all ${timeShow}s ease-in-out`;
@@ -456,6 +306,10 @@ function Clienttv() {
       hideCortina();
 
       onNotification = false;
+
+      if(currentUrlImageVideo.type.startsWith("video")){
+        videoRef.current.play();
+      }
 
     },(timeShow * 1000) + (timeWait * 1000))
 
@@ -501,35 +355,123 @@ function Clienttv() {
   
 
   
-  useEffect(() => {
-    if(currentUrlVideo == "") return
+  // useEffect(() => {
+  //   if(currentUrlImageVideo == null) return
 
-    if(currentUrlVideo.type.startsWith("image")){
+  //   if(currentUrlImageVideo.type.startsWith("image")){
+  //     setTimeout(() => {
+  //       handleUrlChange();
+  //     // }, 10000)      N CANTIDAD DE TIEMPO
+  //     }, 10000)
+  //   }
+  // }, [currentUrlImageVideo])
+
+
+  useEffect(() => {
+    if(!currentUrlImageVideo) return
+
+    if(currentUrlImageVideo.type.startsWith("video")){
+      videoRef.current.volume = 0.1;
+    } 
+      else 
+    if(currentUrlImageVideo.type.startsWith("image")){
       setTimeout(() => {
         handleUrlChange();
       // }, 10000)      N CANTIDAD DE TIEMPO
       }, 10000)
     }
-  }, [currentUrlVideo])
+  }, [currentUrlImageVideo])
+
+
+
+   // SOCKETs
+  useEffect(() => {
+
+    fetchDataArraySecuence();
+
+    
+
+    const socket = io(API_URI);
+    // 'wss://www.hotelmeqo.com/server-calls-tv
+    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv:3100');
+    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv');
+    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv:3100', {path: '/server-calls-tv/socket.io'});
+
+    console.log("Intentando conectar...");
+
+    socket.on('connect', () => {
+      console.log("Conectado");
+    });
+
+    socket.on('disconnect', () => {
+      console.log("Server desconectado");
+    });
+
+
+
+    
+    socket.on("call-on-tv", (data) => {
+      console.log(data)
+
+      setTimeout(()=>{
+        playAudio(data.objeto);
+      }, 1000)
+      
+      setCompleteName(data.objetoTexto.name.toUpperCase() + ' ' + data.objetoTexto.surname.toUpperCase());
+      setPlace(data.objetoTexto.place.toUpperCase());
+      showNotification();
+    
+    });
+
+    socket.on("sendingVideos", (data) => {
+      console.log(data.objeto)
+      // setUrlVideos(data.objeto)
+      urlVideos = data.objeto;
+      urlIndex = 0;
+      
+      if(urlVideos.length == 0) {
+        setcurrentUrlImageVideo(null)
+      } else {
+        setcurrentUrlImageVideo(urlVideos[urlIndex]);
+      }
+    })
+
+
+
+    // Limpieza al desmontar el componente
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.off('callPatient');
+      socket.disconnect();
+      console.log("Desconectado y listeners removidos.");
+    };
+
+  }, []);
 
 
   return (
 
     <div className="allContainer">
       {
-        currentUrlVideo != '' && (
+        currentUrlImageVideo != null && (
           <>
             {
-              currentUrlVideo.type.startsWith("image") && (
-                <img src={currentUrlVideo.source} className="imgRef" alt="imgTemp" />
+              currentUrlImageVideo.type.startsWith("image") && (
+                <img 
+                  src={currentUrlImageVideo.source} 
+                  className="imgRef" 
+                  alt="imgTemp"
+                  ref={imageRef}
+                />
               )  
             }
             {
-              currentUrlVideo.type.startsWith("video") && (
+              currentUrlImageVideo.type.startsWith("video") && (
                 <video
                   className="video"
                   ref={videoRef}
-                  src={currentUrlVideo.source}
+                  src={currentUrlImageVideo.source}
                   // src={urlVideos[urlIndex]}
                   onPlay={handlePlay}
                   onEnded={handleEnd}

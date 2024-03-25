@@ -12,37 +12,26 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    // console.log(username);
-    // console.log(password);
-
 
     e.preventDefault();
-    console.log('Iniciando sesión con:', username, password);
-    
 
     try {
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/login`, {
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/login`, {
         username: username,
         password: password,
       })
-      .then(response => {
         // Aquí manejas la respuesta. Por ejemplo, puedes almacenar un token, navegar a otra página, etc.
-        console.log('Respuesta del servidor:', response.data);
-  
-        if(response.data == "Usuario Administrador OK"){
-          navigate('/admin');
-        } else if(response.data == "Usuario Riohacha OK"){
-          navigate('/clientTv');
-        } else {
-          console.log("Usuario no autenticado")
-        }
-      })
-      .catch(error => {
-        // Aquí manejas posibles errores
-        console.error('Error en la petición:', error);
-      });
+      console.log('Respuesta del servidor:', response.data);
+
+      if(response.data == "Usuario Administrador OK"){
+        navigate('/admin');
+      } else if(response.data == "Usuario Riohacha OK"){
+        navigate('/clientTv');
+      }
     } catch (error) {
-      
+      console.error('Error en la petición:', error);
+      console.log("Usuario no autenticado")
+      alert("Usuario no autenticado")
     }
     
 

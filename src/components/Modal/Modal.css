@@ -9,10 +9,10 @@
   height: 90vh;
   height: 100vh;
 
-  margin-left: 85px;
+  /* margin-left: 85px; */
   /* margin-top: 8%; */
 
-  z-index: 50;
+  z-index: 100;
 
   display: flex;
   flex-flow: row nowrap;
