@@ -66,13 +66,21 @@ html, body {
 
 
 
-.temperatura {
+/* .temperatura {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-end;
   align-items: center;
 
   margin: 10px;
+} */
+.temperatura {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: center;
+
+  height: 100%;
 }
 
 .time {
@@ -92,6 +100,17 @@ html, body {
 
 
 /* ITEMS */
+.temps {
+  height: 70%;
+
+  display: flex;
+  flex-flow: row nowrap;
+
+  position: relative;
+  top: -10px;
+}
+
+
 .temperatura-img {
   position: relative;
   width: 70px;
@@ -105,6 +124,7 @@ html, body {
   font-size: 50px;
   
   margin-left: 5px;
+  
 }
 .temperatura-grade-number {
   font-family: "Fira Sans", sans-serif;
@@ -123,6 +143,14 @@ html, body {
   font-size: 80px;
   
   margin-left: 5px;
+}
+
+.municipio {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 100;
+  /* font-size: 14px; */
+  font-size: 18px;
+  font-style: normal;
 }
 
 
@@ -163,6 +191,8 @@ html, body {
   /* animation: mecoAnimacion 3s infinite; */
   /* animation: mecoAnimacion 3s infinite; */
   transform: scale(0) rotate(0deg);
+
+  z-index: 20;
 }
 
 @keyframes mecoAnimacion {
@@ -324,39 +354,44 @@ html, body {
   /* transition: background-color, 1s ease-in; */
 }
 
-.btnStartVideos {
+
+.cortina1 {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 2;
+  top: 0;
+  height: 100%;
+  z-index: 10;
+  width:  100%;
+  background-color: #1B1517;
   
-  background-color: rgb(133, 206, 59);
-  border: 1px solid black;
-  width: 120px;
-  height: 50px;
-
-
-  border-radius: 12px;
-
-  font-size: 20px;
-  cursor: pointer;
+  left: -100%;
 }
 
-.btnSincronizeTime {
+.cortina2 {
   position: absolute;
-  top: 20px;
-  left: 280px;
-  z-index: 2;
+  top: 0;
+  width:  100%;
+  height: 100%;
+  z-index: 15;
+  background-color: #176F6E;
   
-  background-color: rgb(133, 206, 59);
-  border: 1px solid black;
-  width: 120px;
-  height: 50px;
-
-
-  border-radius: 12px;
-
-  font-size: 20px;
-  cursor: pointer;
+  left: -100%;
 }
+
+.transicion1 {
+  animation: moveRight 4s ease-in-out forwards;
+}
+.transicion2 {
+  animation: moveRight 6s ease-in-out forwards;
+}
+
+@keyframes moveRight {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+
 

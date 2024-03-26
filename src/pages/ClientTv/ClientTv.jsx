@@ -1,5 +1,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom"
 import io from 'socket.io-client';
 
 
@@ -16,6 +17,7 @@ import axios from 'axios';
 import {endpointGetArraySecuenceEndpoint} from "../../api/api.js"
 import API_URI from "../../api/api.js"; "../../api/api.js"
 
+import {getWeatherRiohacha, getWeatherFonseca, getWeatherMaicao} from "../../helps/weather.js";
 
 let onNotification = false;
 
@@ -141,16 +143,17 @@ function getHoursMinutes(){
 
 
 
-
-
-
-
 function Clienttv() {
+
+  const { municipio } = useParams();
+  const [municipioText, setMunicipioText] = useState()
+  const [temperature, setTemperature] = useState()
 
   const fetchDataArraySecuence = async () => {
     try {
       const response = await axios.get(endpointGetArraySecuenceEndpoint)
       console.log("fetch array secuence done");
+      console.log(response.data[0].files)
 
       urlVideos = response.data[0].files;
       urlIndex = 0;
@@ -174,7 +177,6 @@ function Clienttv() {
   const mecoRef = useRef();
   const cortinaRef = useRef();
   const videoRef = useRef(null);
-  const imageRef = useRef(null)
   
   const [currentUrlImageVideo, setcurrentUrlImageVideo] = useState(null);
 
@@ -209,13 +211,46 @@ function Clienttv() {
       if(urlVideos.length == 0) return
 
       if(urlIndex == urlVideos.length - 1){
-        urlIndex = 0
+        urlIndex = 0;
       } else {
         urlIndex += 1
       }
-      
-      setcurrentUrlImageVideo(urlVideos[urlIndex])
 
+      if(urlIndex == 0 && urlVideos.length == 1){
+        if(videoRef.current){
+          if(urlVideos[urlIndex].type.startsWith('video') && urlVideos[urlIndex].source == videoRef.current.src){
+            videoRef.current.play();
+            return
+          }
+        }
+      }
+
+      dispararAnimacion()
+  
+      const beforeArray = [...urlVideos]
+      setTimeout(() => {
+        let conteo = 0;
+        beforeArray.forEach((element, index) => {
+          if(element.source == urlVideos[index].source){
+            conteo += 1
+          }
+        })
+
+        if(onNotification == true) {
+          setcurrentUrlImageVideo(urlVideos[urlIndex])
+          if(urlVideos[urlIndex].type.startsWith("video") && videoRef.current){
+            videoRef.current.pause();
+          }
+        }else {
+          if(conteo == urlVideos.length){
+            setcurrentUrlImageVideo(urlVideos[urlIndex])
+            console.log("is it?")
+          }
+          console.log("se ejeecuta o no?")
+        }
+
+      }, 2000)
+      
     }
 
   };
@@ -223,13 +258,15 @@ function Clienttv() {
 
   function handlePlay () {
       // terminar transicion
-
-      // videoRef.current.play()
-      // console.log("Starting video");
   };
   function handleEnd () {
       // console.log("Ending video");
-      // iniciar transicion
+
+      // if(urlIndex == 0 && urlVideos.length == 1){
+      //   if(currentUrlImageVideo.type.startsWith("video")){
+      //     videoRef.current.play()
+      //   }
+      // }
 
       handleUrlChange();
   };
@@ -268,7 +305,8 @@ function Clienttv() {
 
     showCortina();
     
-    if(currentUrlImageVideo.type.startsWith("video")){
+    // if(currentUrlImageVideo.type.startsWith("video")){
+    if(urlVideos[urlIndex].type.startsWith("video") && videoRef.current){
       videoRef.current.pause();
     }
 
@@ -307,9 +345,12 @@ function Clienttv() {
 
       onNotification = false;
 
-      if(currentUrlImageVideo.type.startsWith("video")){
+      if(urlVideos[urlIndex].type.startsWith("video") && videoRef.current){
         videoRef.current.play();
       }
+      // if(currentUrlImageVideo.type.startsWith("video")){
+      //   videoRef.current.play();
+      // }
 
     },(timeShow * 1000) + (timeWait * 1000))
 
@@ -355,28 +396,18 @@ function Clienttv() {
   
 
   
-  // useEffect(() => {
-  //   if(currentUrlImageVideo == null) return
-
-  //   if(currentUrlImageVideo.type.startsWith("image")){
-  //     setTimeout(() => {
-  //       handleUrlChange();
-  //     // }, 10000)      N CANTIDAD DE TIEMPO
-  //     }, 10000)
-  //   }
-  // }, [currentUrlImageVideo])
-
 
   useEffect(() => {
-    if(!currentUrlImageVideo) return
+    if(currentUrlImageVideo == null) return
 
     if(currentUrlImageVideo.type.startsWith("video")){
-      videoRef.current.volume = 0.1;
+      videoRef.current.volume = 0.3;
     } 
-      else 
+
     if(currentUrlImageVideo.type.startsWith("image")){
       setTimeout(() => {
         handleUrlChange();
+        // console.log("ejecutandose")
       // }, 10000)      N CANTIDAD DE TIEMPO
       }, 10000)
     }
@@ -384,8 +415,37 @@ function Clienttv() {
 
 
 
+
+  
    // SOCKETs
   useEffect(() => {
+
+    switch(municipio){
+      case "riohacha1":
+      case "riohacha2":
+      case "riohacha3":
+        setMunicipioText("Riohacha, La Guajira")
+
+        getWeatherRiohacha()
+        .then(res => {if(res) setTemperature(res)})
+        
+        break;
+      case "fonseca":
+
+        setMunicipioText("Fonseca, La Guajira")
+
+        getWeatherFonseca()
+          .then(res => {if(res) setTemperature(res)})
+          
+        break;
+      case "maicao":
+        setMunicipioText("Maicao, La Guajira")
+
+        getWeatherMaicao()
+          .then(res => {if(res) setTemperature(res)})
+
+        break; 
+    }
 
     fetchDataArraySecuence();
 
@@ -425,7 +485,6 @@ function Clienttv() {
 
     socket.on("sendingVideos", (data) => {
       console.log(data.objeto)
-      // setUrlVideos(data.objeto)
       urlVideos = data.objeto;
       urlIndex = 0;
       
@@ -433,6 +492,12 @@ function Clienttv() {
         setcurrentUrlImageVideo(null)
       } else {
         setcurrentUrlImageVideo(urlVideos[urlIndex]);
+        if(videoRef.current){
+          if(urlVideos[urlIndex].type.startsWith('video') && urlVideos[urlIndex].source == videoRef.current.src){
+            videoRef.current.currentTime = 0;
+            videoRef.current.play();
+          }
+        }
       }
     })
 
@@ -449,6 +514,14 @@ function Clienttv() {
 
   }, []);
 
+  const [transition, setTransition] = useState(false)
+  const dispararAnimacion = () => {
+    setTransition(true)
+    
+    setTimeout(() => {
+      setTransition(false)
+    }, 7000)  
+  }
 
   return (
 
@@ -462,7 +535,6 @@ function Clienttv() {
                   src={currentUrlImageVideo.source} 
                   className="imgRef" 
                   alt="imgTemp"
-                  ref={imageRef}
                 />
               )  
             }
@@ -494,9 +566,13 @@ function Clienttv() {
       <div className="containerTempTime">
         
         <div className="temperatura">
-          <img src={clouds} alt="cloud" className="temperatura-img" />
-          <span className="temperatura-grade-number">26</span>
-          <span className="temperatura-grade-symbol">º</span>
+          {/* <img src={clouds} alt="cloud" className="temperatura-img" /> */}
+          <div className="temps">
+            {/* <span className="temperatura-grade-number">26</span> */}
+            <span className="temperatura-grade-number">{temperature}</span>
+            <span className="temperatura-grade-symbol">º</span>
+          </div>
+          <span className="municipio">{municipioText}</span>
         </div>
 
         <div className="separador"></div>
@@ -521,6 +597,9 @@ function Clienttv() {
           <span className="nameConsultorio">{place}</span>
         </div>
       </div>
+
+      <div className={`cortina1 ${transition ? "transicion1" : ""}`}></div>
+      <div className={`cortina2 ${transition ? "transicion2" : ""}`}></div>
 
     </div>
   );

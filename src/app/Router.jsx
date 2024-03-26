@@ -19,7 +19,8 @@ const Router = () => {
       <Routes>
         <Route path="/login" element={<Login />}/>
         <Route path="/admin" element={<Admin />}/>
-        <Route path="/clientTv" element={<ClientTv />}/>
+        {/* <Route path="/clientTv" element={<ClientTv />}/> */}
+        <Route path="/clientTv/:municipio" element={<ClientTv />}/>
         <Route path="*" element={<NonExisting />}/>
         <Route path="/" element={<RedirectLogin />}/>
       </Routes>
