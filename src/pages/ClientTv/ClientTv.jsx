@@ -177,6 +177,8 @@ function Clienttv() {
   const mecoRef = useRef();
   const cortinaRef = useRef();
   const videoRef = useRef(null);
+  const imageRef = useRef(null);
+
   
   const [currentUrlImageVideo, setcurrentUrlImageVideo] = useState(null);
 
@@ -223,6 +225,11 @@ function Clienttv() {
             return
           }
         }
+        if(imageRef.current){
+          if(urlVideos[urlIndex].type.startsWith('image') && urlVideos[urlIndex].source == imageRef.current.src){
+            return
+          }
+        }
       }
 
       dispararAnimacion()
@@ -244,9 +251,9 @@ function Clienttv() {
         }else {
           if(conteo == urlVideos.length){
             setcurrentUrlImageVideo(urlVideos[urlIndex])
-            console.log("is it?")
+            // console.log("is it?")
           }
-          console.log("se ejeecuta o no?")
+          // console.log("se ejeecuta o no?")
         }
 
       }, 2000)
@@ -535,6 +542,7 @@ function Clienttv() {
                   src={currentUrlImageVideo.source} 
                   className="imgRef" 
                   alt="imgTemp"
+                  ref={imageRef}
                 />
               )  
             }
