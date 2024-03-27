@@ -232,10 +232,10 @@ function Clienttv() {
         }
       }
 
-      dispararAnimacion()
+      // dispararAnimacion()
   
       const beforeArray = [...urlVideos]
-      setTimeout(() => {
+      // setTimeout(() => {
         let conteo = 0;
         beforeArray.forEach((element, index) => {
           if(element.source == urlVideos[index].source){
@@ -256,7 +256,7 @@ function Clienttv() {
           // console.log("se ejeecuta o no?")
         }
 
-      }, 2000)
+      // }, 2000)
       
     }
 
