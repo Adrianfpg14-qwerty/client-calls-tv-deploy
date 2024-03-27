@@ -508,7 +508,10 @@ function Clienttv() {
       }
     })
 
-
+    socket.on("updateWeather", () => {
+      getWeatherRiohacha()
+        .then(res => {if(res) setTemperature(res)})
+    })
 
     // Limpieza al desmontar el componente
     return () => {
