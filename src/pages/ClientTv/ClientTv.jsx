@@ -12,6 +12,7 @@ import meco from "../../assets/images/meco.png"
 
 // Weather API
 import clouds from "../../assets/icons/clouds.svg";
+import loadingGif from "../../assets/gifs/loading.gif"
 
 import axios from 'axios';
 import {endpointGetArraySecuenceEndpoint} from "../../api/api.js"
@@ -147,7 +148,7 @@ function Clienttv() {
 
   const { municipio } = useParams();
   const [municipioText, setMunicipioText] = useState()
-  const [temperature, setTemperature] = useState()
+  const [temperature, setTemperature] = useState('')
 
   const fetchDataArraySecuence = async () => {
     try {
@@ -456,14 +457,8 @@ function Clienttv() {
 
     fetchDataArraySecuence();
 
-    
-
     const socket = io(API_URI);
-    // 'wss://www.hotelmeqo.com/server-calls-tv
-    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv:3100');
-    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv');
-    // const socket = io('wss://www.hotelmeqo.com/server-calls-tv:3100', {path: '/server-calls-tv/socket.io'});
-
+    
     console.log("Intentando conectar...");
 
     socket.on('connect', () => {
@@ -580,7 +575,14 @@ function Clienttv() {
           {/* <img src={clouds} alt="cloud" className="temperatura-img" /> */}
           <div className="temps">
             {/* <span className="temperatura-grade-number">26</span> */}
-            <span className="temperatura-grade-number">{temperature}</span>
+            <span className="temperatura-grade-number">
+              {
+                temperature == '' ?
+                  <img src={loadingGif} className="gifLoadingStyles"/>
+                :
+                  temperature
+              }
+            </span>
             <span className="temperatura-grade-symbol">º</span>
           </div>
           <span className="municipio">{municipioText}</span>

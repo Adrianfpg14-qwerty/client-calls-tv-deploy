@@ -395,3 +395,8 @@ html, body {
 
 
 
+.gifLoadingStyles {
+  width: 60px;
+  position: relative;
+  top: 25px;
+}

@@ -1,14 +1,5 @@
 import axios from "axios"
 
-const headerKey =  import.meta.env.VITE_RapidAPIKey
-const headerHost = import.meta.env.VITE_RapidAPIHost
-
-
-const municipios = {
-  riohacha: "riohacha",
-  fonseca: "fonseca",
-  maicao: "maicao"
-}
 
 
 const convertFToC = (temp) => {
@@ -17,26 +8,21 @@ const convertFToC = (temp) => {
 
 const getWeather = async (municipio) => {
 
-  const currentMunicipio = municipios[municipio]
-
   const options = {
     method: 'GET',
-    url: 'https://yahoo-weather5.p.rapidapi.com/weather',
-    params: {
-      location: currentMunicipio,
-      format: 'json',
-      u: 'f'
-    },
+    url: 'https://weatherapi-com.p.rapidapi.com/current.json',
+    params: {q: municipio},
     headers: {
-      'X-RapidAPI-Key': headerKey,
-      'X-RapidAPI-Host': headerHost
+      'X-RapidAPI-Key': import.meta.env.VITE_RapidAPIKey,
+      'X-RapidAPI-Host': import.meta.env.VITE_RapidAPIHost
     }
   };
 
   try {
     const response = await axios.request(options);
     console.log(response)
-    return Math.ceil(convertFToC(response.data.current_observation.condition.temperature));
+    // return Math.ceil(convertFToC(response.data.current_observation.condition.temperature));
+    return Math.ceil(response.data.current.temp_c)
   } catch (error) {
     return false;
   }

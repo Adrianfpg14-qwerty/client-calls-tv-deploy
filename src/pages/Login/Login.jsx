@@ -3,13 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import "./Login.css"
 import axios from "axios"
 
+let username = '';
+let password = '';
+
 
 const Login = () => {
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [isHide, setIsHide] = useState(true)
 
   const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
 
@@ -17,57 +20,67 @@ const Login = () => {
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/login`, {
-        username: username,
-        password: password,
+        username,
+        password,
       })
-        // Aquí manejas la respuesta. Por ejemplo, puedes almacenar un token, navegar a otra página, etc.
-      console.log('Respuesta del servidor:', response);
+        // Almacenar un token, navegar a otra página, etc.
+      // console.log('Respuesta del servidor:', response);
 
       if(response.data == "Admin Ok"){
         navigate('/admin');
-      // } else if(response.data == "Usuario Riohacha OK"){
       } else {
-        // if(response)
         navigate('/clientTv/' + response.data);
       }
     } catch (error) {
       console.log('Respuesta del servidor:', error);
-      // console.error('Error en la petición:', error);
-      // console.log("Usuario no autenticado")
-      // alert("Usuario no autenticado")
     }
   };
 
+  const handleUserNameInput = (e) => {
+    if(e.target.value == "mquintero") {
+      setIsHide(false);
+    } else {
+      setIsHide(true);
+    }
 
+    username = e.target.value
+    handleSubmit(e)
+  }
+
+  const handlePasswordInput = (e) => {
+    password = e.target.value
+    handleSubmit(e)
+  }
 
   return (
     <div className="login-container">
-      <form onSubmit={handleSubmit}>
-        <div className="inputs">
+      
+      <form>
+
+        <div className="inputs usernameInput">
           <label htmlFor="username">Usuario:</label>
           <input
             type="text"
             id="username"
             className="nameInputLogin"
             tabIndex="1"
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => handleUserNameInput(e)}
             required
             autoFocus
           />
         </div>
 
-        <div className="inputs">
+        <div className={`inputs ${isHide ? "hide" : ""}`}>
           <label htmlFor="password">Contraseña:</label>
           <input
             type="password"
             id="password"
             className="passwordInputLogin"
             tabIndex="2"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => handlePasswordInput(e)}
             onKeyDown={
               (e) => {
-                setPassword(e.target.value)
-                if(e.code == "Enter" || e.key == "Enter" || e.keyCode == 13){
+                if(e.code == "Enter" || e.key == "Enter"){
                   handleSubmit(e)
                 }
               }
@@ -77,12 +90,13 @@ const Login = () => {
         </div>
 
         <input 
-          className="submitLogin"
+          className={`submitLogin ${isHide ? "hide" : ""}`}
           type="button"
           value="Iniciar Sesión"
           onClick={(e) => handleSubmit(e)}
           tabIndex="3"
         />
+
       </form>
     </div>
   );
