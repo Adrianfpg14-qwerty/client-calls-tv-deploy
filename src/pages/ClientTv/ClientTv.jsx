@@ -24,6 +24,22 @@ let onNotification = false;
 
 // Horas y minutos
 // Get hours & minutes
+function GetMinutes () {
+  let minutosTemp = new Date().getMinutes();
+
+  minutosTemp = minutosTemp < 10 ? '0' + minutosTemp : minutosTemp;
+
+  return minutosTemp;
+}
+
+function GetHours () {
+  let horasTemp = new Date().getHours();
+
+  horasTemp = horasTemp < 10 ? '0' + horasTemp : horasTemp;
+
+  return horasTemp;
+}
+
 function getHoursMinutes(){
   let horasTemp = new Date().getHours();
   let minutosTemp = new Date().getMinutes();
@@ -147,8 +163,8 @@ function getHoursMinutes(){
 function Clienttv() {
 
   const { municipio } = useParams();
-  const [municipioText, setMunicipioText] = useState()
-  const [temperature, setTemperature] = useState('')
+  const [ municipioText, setMunicipioText ] = useState()
+  const [ temperature, setTemperature ] = useState('')
 
   const fetchDataArraySecuence = async () => {
     try {
@@ -194,8 +210,8 @@ function Clienttv() {
   const [month, setMonth] = useState(mesesDelAnho[mesDelAnho])
   
   // HORA
-  const [horas, setHoras] = useState(getHoursMinutes()[0])
-  const [minutos, setMinutos] = useState(getHoursMinutes()[1])
+  const [horas, setHoras] = useState(GetHours())
+  const [minutos, setMinutos] = useState(GetMinutes())
  
  
   // VIDEOS
@@ -373,8 +389,8 @@ function Clienttv() {
   let waitSeconds = 60 - segundos;
 
   setTimeout(() => {
-    setHoras(getHoursMinutes()[0])
-    setMinutos(getHoursMinutes()[1])
+    setHoras(GetHours())
+    setMinutos(GetMinutes())
 
     timerFunction();
   }, (waitSeconds * 1000));
@@ -392,8 +408,15 @@ function Clienttv() {
 
   function timerFunction () {
     setInterval(()=>{
-      setHoras(getHoursMinutes()[0])
-      setMinutos(getHoursMinutes()[1])
+      setMinutos(GetMinutes());
+
+      let temporalHour = new Date().getHours();
+      if(temporalHour > horas){
+        setHoras(GetHours());
+        console.log("changing hour")
+      } else {
+        console.log("not yet")
+      }
 
       let temporalDay = new Date().getDate();
       if(temporalDay > day){
