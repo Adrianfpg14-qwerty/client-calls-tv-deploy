@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import "./Folder.css"
 
 import Folderitem from '../../../../components/Folderitem/Folderitem.jsx'
@@ -6,20 +6,22 @@ import Folderitem from '../../../../components/Folderitem/Folderitem.jsx'
 
 import axios from 'axios'
 import {endpointFolders} from "../../../../api/api.js"
-import {endpointCreateFolders} from "../../../../api/api.js"
+
+import { AppContext } from '../../../../components/Provider.jsx'
 
 
 const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, handleOpenModalOnRoot}) => {
   
+  const [state, setState] = useContext(AppContext)
 
   const [items, setItems] = useState([])
-
 
 
   const fetchDataFolders = async () => {
     try {
       const response = await axios.get(endpointFolders)
       console.log("fetch folders done");
+      console.log(response.data)
       setItems(response.data);
     } catch (error) {
       console.error('Hubo un error al obtener la carpeta:', error);
@@ -28,63 +30,22 @@ const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, 
 
 
   useEffect(() => {
-    console.log("folder selected")
     fetchDataFolders(); 
   }, [])
 
-
-
   
-
-  const createFolder = async (nameFolder) => {
-
-    try {
-      const response = await axios.post(endpointCreateFolders, {nameFolder})
-      console.log("push create-folder done");
-      console.log("response de endpoint: " + response)
-      handleCloseModal();
-      fetchDataFolders();
-
-    } catch (error) {
-      console.error('Hubo un error al crear la carpeta:', error);
+  useEffect(() => {
+    if(state.doOnce && state.estado){
+      setState({doOnce : false, estado : false})
+      fetchDataFolders();  
     }
-  }
-
-
-
-
-
-  // const [createFolderState, setCreateFolderState] = useState(false);
-
-  // const handleOpenModal = () => {
-  //   // setCreateFolderState(true);
-
-  //   handleOpenModalOnRoot(handleCloseModal,createFolder )
-
-  //   // {
-  //   //   createFolderState && (
-  //   //     <Modal handleCloseModal={handleCloseModal} createFolder={createFolder} />
-  //   //   )
-  //   // }
-  // }
-
-
-
-  // const handleCloseModal = () => {
-
-  //   // setCreateFolderState(false);
-  // }
-
-
-
-
-  
+  }, [state])
+ 
 
   return (
       <div className='folder-init'>
         <div className="newItemContainer folderinitnew">
-          {/* <input className="newItem" type="button" value="+ New" onClick={() => handleOpenModal()}/> */}
-          <input className="newItem" type="button" value="+ New" onClick={() => handleOpenModalOnRoot(createFolder)}/>
+          <input className="newItem" type="button" value="+ New" onClick={() => handleOpenModalOnRoot()}/>
         </div>
 
         <div className="folderContainers">
@@ -96,13 +57,6 @@ const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, 
             )
           }
         </div>
-
-        {/* {
-          createFolderState && (
-            <Modal handleCloseModal={handleCloseModal} createFolder={createFolder} />
-          )
-        } */}
-
       </div>
   )
 }

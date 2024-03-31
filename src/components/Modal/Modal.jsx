@@ -1,36 +1,38 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import "./Modal.css";
 
 
 
-
+import { AppContext } from "../Provider";
 
 const Modal = ({handleCloseModal, createFolder}) => {
 
-    const [btnHabilitador, setBtnHabilitador] = useState(true);
+  const [state, setState] = useContext(AppContext)
 
 
-    const inputNameFolderRef = useRef()
+  const [btnHabilitador, setBtnHabilitador] = useState(true);
 
-    const [nameFolder, setNameFolder] = useState("")
-    const handleChangeWritingNameFolder = () => {
-      setNameFolder(inputNameFolderRef.current.value)
+  const inputNameFolderRef = useRef()
 
-      // console.log(inputNameFolderRef.current.value)
-      if(inputNameFolderRef.current.value == "") {
-        setBtnHabilitador(true)
-      } else {
-        setBtnHabilitador(false)
-      }
+  const [nameFolder, setNameFolder] = useState("")
+  const handleChangeWritingNameFolder = () => {
+    setNameFolder(inputNameFolderRef.current.value)
+
+    if(inputNameFolderRef.current.value == "") {
+      setBtnHabilitador(true)
+    } else {
+      setBtnHabilitador(false)
     }
+  }
 
 
-    const handleCreateFolder = () => {
-      createFolder(nameFolder);
-    }
-
+  const handleCreateFolder = async () => {
+    const response = await createFolder(nameFolder);
     
-
+    if(response) {
+      setState({doOnce : true, estado : true})
+    }
+  }
 
 
     return (

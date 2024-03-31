@@ -50,7 +50,7 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
   const fetchDataFolders = async () => {
     try {
       const response = await axios.get(endpointFolders)
-      console.log("fetch folders done");
+      // console.log("fetch folders done");
 
       const allfolders = response.data;
       
@@ -77,8 +77,8 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
   
 
   useEffect(() => {
-    console.log("infoItemFolder");
-    console.log(infoItemFolder);
+    // console.log("infoItemFolder");
+    // console.log(infoItemFolder);
   }, [infoItemFolder])
 
 
@@ -176,8 +176,8 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
 
   useEffect(() => {
 
-    console.log("files")
-    console.log(files)
+    // console.log("files")
+    // console.log(files)
 
     // Revocar URLs cuando el componente se desmonte o cambie el estado
     return () => {

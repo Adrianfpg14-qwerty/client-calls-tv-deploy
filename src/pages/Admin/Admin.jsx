@@ -22,6 +22,9 @@ import InsideFolderComponent from '../../components/InsideFolderComponent/Inside
 import Modal from '../../components/Modal/Modal';
 // import folders from "./info.js"
 
+import {endpointCreateFolders} from "../../api/api.js"
+
+import Provider from "../../components/Provider.jsx"
 
 const Admin = () => {
   const menuRef = useRef()
@@ -64,11 +67,22 @@ const Admin = () => {
   const [idBox, setIdBox] = useState("");
 
 
-  let createFolderOnRoot;
-  const [openModalOnRoot, setOpenModalOnRoot] = useState(false)
-  const handleOpenModalOnRoot = (createFolder) => {
-    let createFolderOnRoot = createFolder;
+  const createFolder = async (nameFolder) => {
+    try {
+      const response = await axios.post(endpointCreateFolders, {nameFolder})
+      console.log("push create-folder done");
+      handleCloseModalOnRoot();
+      return true
+    } catch (error) {
+      console.error('Hubo un error al crear la carpeta:', error);
+      return false
+    }
+  }
 
+
+  const [modalOnRoot, setOpenModalOnRoot] = useState(false)
+
+  const handleOpenModalOnRoot = () => {
     setOpenModalOnRoot(true);
   }
 
@@ -77,103 +91,105 @@ const Admin = () => {
   }
 
 
-
+  
 
   return (
-    <div className="pageContainer no-select">
-    
-      <div className="header">
-
-        <div className="leftHeader">
-          <img src={menuIcon} className="menuIcon" onClick={() => handleShowMenu()} ref={iconMenuRef}/>
-          <span className="nameApp">
-            {/* MediCast */}
-            {/* MG-TV */}
-            {/* Meco-TV */}
-            {/* Vox-TV */}
-            Tv-Call
-          </span>
-          <span className="navBar" ref={navBarRef} onClick={() => {
-            if(navBarRef.current.textContent == "| Carpetas"){
-              setPageSelected(1)
-              navBarNextRef.current.textContent = ""
-            }
-            if(navBarRef.current.textContent == "| Lista"){
-              setPageSelected(2)
-              navBarNextRef.current.textContent = ""
-            }
-            // if(navBarRef.current.textContent == "| TV"){
-            //   setPageSelected(3)
-            //   navBarNextRef.current.textContent = ""
-            // }
-          }}>
-            {"| Carpetas"}  
-          </span>
-          <span className="navBarNext" ref={navBarNextRef} >
-            {""}
-          </span>
-        </div>
-
-        <div className="rightHeader">
-          <img src={profileIcon} className="profileIcon"/>
-        </div>
-
-      </div>
+    <Provider >
+      <div className="pageContainer no-select">
       
-      <div className="main">
+        <div className="header">
 
-        <div className={`menu ${showMenu ? "hided" : "desplegated"}`} ref={menuRef}>
-          <div className={`itemPage ${(pageSelected === 1 || pageSelected === 4) ? "selected" : ""}`} onClick={() => {handleNavigation(1, "| Carpetas")} }>
-            <span className="namePage">Carpetas</span>
-            <img src={folderIcon} className="iconPage" />
+          <div className="leftHeader">
+            <img src={menuIcon} className="menuIcon" onClick={() => handleShowMenu()} ref={iconMenuRef}/>
+            <span className="nameApp">
+              {/* MediCast */}
+              {/* MG-TV */}
+              {/* Meco-TV */}
+              {/* Vox-TV */}
+              Tv-Call
+            </span>
+            <span className="navBar" ref={navBarRef} onClick={() => {
+              if(navBarRef.current.textContent == "| Carpetas"){
+                setPageSelected(1)
+                navBarNextRef.current.textContent = ""
+              }
+              if(navBarRef.current.textContent == "| Lista"){
+                setPageSelected(2)
+                navBarNextRef.current.textContent = ""
+              }
+              // if(navBarRef.current.textContent == "| TV"){
+              //   setPageSelected(3)
+              //   navBarNextRef.current.textContent = ""
+              // }
+            }}>
+              {"| Carpetas"}  
+            </span>
+            <span className="navBarNext" ref={navBarNextRef} >
+              {""}
+            </span>
           </div>
 
-          <div className={`itemPage ${(pageSelected === 2 || pageSelected === 5) ? "selected" : ""}`} onClick={() => {handleNavigation(2, "| Linea")} }>
-            <span className="namePage">Lista de reproducción</span>
-            <img src={timeLineIcon} className="iconPage" />
+          <div className="rightHeader">
+            <img src={profileIcon} className="profileIcon"/>
           </div>
 
-          {/* <div className={`itemPage ${(pageSelected === 3 || pageSelected === 6) ? "selected" : ""}`} onClick={() => {handleNavigation(3, "| TV")} }>
-            <span className="namePage">TV</span>
-            <img src={tvIcon} className="iconPage" />
-          </div> */}
+        </div>
+        
+        <div className="main">
 
+          <div className={`menu ${showMenu ? "hided" : "desplegated"}`} ref={menuRef}>
+            <div className={`itemPage ${(pageSelected === 1 || pageSelected === 4) ? "selected" : ""}`} onClick={() => {handleNavigation(1, "| Carpetas")} }>
+              <span className="namePage">Carpetas</span>
+              <img src={folderIcon} className="iconPage" />
+            </div>
+
+            <div className={`itemPage ${(pageSelected === 2 || pageSelected === 5) ? "selected" : ""}`} onClick={() => {handleNavigation(2, "| Linea")} }>
+              <span className="namePage">Lista de reproducción</span>
+              <img src={timeLineIcon} className="iconPage" />
+            </div>
+
+            {/* <div className={`itemPage ${(pageSelected === 3 || pageSelected === 6) ? "selected" : ""}`} onClick={() => {handleNavigation(3, "| TV")} }>
+              <span className="namePage">TV</span>
+              <img src={tvIcon} className="iconPage" />
+            </div> */}
+
+          </div>
+
+          <div className="content">
+            {pageSelected === 1 && (
+              // <Folder folders={folders} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected} setInfoFolder={setInfoFolder} setColorFolder={setColorFolder} />
+              <Folder setIdBox={setIdBox} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected} setInfoFolder={setInfoFolder} setColorFolder={setColorFolder} handleOpenModalOnRoot={handleOpenModalOnRoot} modalOnRoot={modalOnRoot}/>
+            )}
+            {pageSelected === 2 && (
+              // <Timeline folders={folders} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected}/>
+              <Timeline navBarNextRef={navBarNextRef} setPageSelected={setPageSelected}/>
+            )}
+            {/* {pageSelected === 3 && (
+              <Tv folders={folders} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected}/>
+            )} */}
+
+            {pageSelected === 4 && (
+              // <InsideFolderComponent navBarNextRef={navBarNextRef} infoFolder={infoFolder} colorFolder={colorFolder} />
+              <InsideFolderComponent idBox={idBox} navBarNextRef={navBarNextRef} infoFolder={infoFolder} colorFolder={colorFolder} />
+            )}
+            {/* {pageSelected === 5 && (
+              <InsideTimelineComponent navBarRef={navBarRef} />
+            )}
+            {pageSelected === 6 && (
+              <InsideTvComponent navBarRef={navBarRef} />
+            )} */}
+          </div>
         </div>
 
-        <div className="content">
-          {pageSelected === 1 && (
-            // <Folder folders={folders} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected} setInfoFolder={setInfoFolder} setColorFolder={setColorFolder} />
-            <Folder setIdBox={setIdBox} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected} setInfoFolder={setInfoFolder} setColorFolder={setColorFolder} handleOpenModalOnRoot={handleOpenModalOnRoot}/>
-          )}
-          {pageSelected === 2 && (
-            // <Timeline folders={folders} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected}/>
-            <Timeline navBarNextRef={navBarNextRef} setPageSelected={setPageSelected}/>
-          )}
-          {/* {pageSelected === 3 && (
-            <Tv folders={folders} navBarNextRef={navBarNextRef} setPageSelected={setPageSelected}/>
-          )} */}
-
-          {pageSelected === 4 && (
-            // <InsideFolderComponent navBarNextRef={navBarNextRef} infoFolder={infoFolder} colorFolder={colorFolder} />
-            <InsideFolderComponent idBox={idBox} navBarNextRef={navBarNextRef} infoFolder={infoFolder} colorFolder={colorFolder} />
-          )}
-          {/* {pageSelected === 5 && (
-            <InsideTimelineComponent navBarRef={navBarRef} />
-          )}
-          {pageSelected === 6 && (
-            <InsideTvComponent navBarRef={navBarRef} />
-          )} */}
-        </div>
+        {
+          modalOnRoot && (
+            <Modal handleCloseModal={handleCloseModalOnRoot} createFolder={createFolder}/>
+          )
+        }
+        
+        
       </div>
-
-      {
-        openModalOnRoot && (
-          <Modal handleCloseModal={handleCloseModalOnRoot} createFolder={createFolderOnRoot}/>
-        )
-      }
-      
-      
-    </div>
+    </Provider>
   )
 }
 

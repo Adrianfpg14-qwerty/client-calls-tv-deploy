@@ -26,17 +26,13 @@ let onNotification = false;
 // Get hours & minutes
 function GetMinutes () {
   let minutosTemp = new Date().getMinutes();
-
   minutosTemp = minutosTemp < 10 ? '0' + minutosTemp : minutosTemp;
-
   return minutosTemp;
 }
 
 function GetHours () {
   let horasTemp = new Date().getHours();
-
   horasTemp = horasTemp < 10 ? '0' + horasTemp : horasTemp;
-
   return horasTemp;
 }
 
