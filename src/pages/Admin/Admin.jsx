@@ -20,9 +20,9 @@ import Tv from './internalPages/Tv/Tv';
 import InsideFolderComponent from '../../components/InsideFolderComponent/InsideFolderComponent';
 
 import Modal from '../../components/Modal/Modal';
-// import folders from "./info.js"
 
 import {endpointCreateFolders} from "../../api/api.js"
+import {endpointDeleteFolder} from "../../api/api.js"
 
 import Provider from "../../components/Provider.jsx"
 
@@ -70,14 +70,16 @@ const Admin = () => {
   const createFolder = async (nameFolder) => {
     try {
       const response = await axios.post(endpointCreateFolders, {nameFolder})
-      console.log("push create-folder done");
+      console.log("POST: [success] create folder");
       handleCloseModalOnRoot();
       return true
     } catch (error) {
-      console.error('Hubo un error al crear la carpeta:', error);
+      console.error('POST: [failed] create folder:', error);
       return false
     }
   }
+
+  
 
 
   const [modalOnRoot, setOpenModalOnRoot] = useState(false)

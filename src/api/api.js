@@ -8,6 +8,9 @@ export const endpointFolders =
 export const endpointCreateFolders = 
   API_URI + "/api/folder/create-folder";
 
+export const endpointDeleteFolder = 
+  API_URI + "/api/folder/delete-folder";
+
 export const endpointCreateFile = 
   API_URI + "/api/folder/add-file";
 

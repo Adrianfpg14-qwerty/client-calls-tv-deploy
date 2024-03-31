@@ -20,11 +20,10 @@ const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, 
   const fetchDataFolders = async () => {
     try {
       const response = await axios.get(endpointFolders)
-      console.log("fetch folders done");
-      console.log(response.data)
+      console.log("GET: [success] fetch folders");
       setItems(response.data);
     } catch (error) {
-      console.error('Hubo un error al obtener la carpeta:', error);
+      console.log("GET: [failed] fetch folders:" + error);
     }
   }
 
@@ -52,7 +51,7 @@ const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, 
           {
             items.length > 0 && (
               items.map((folderData, index) => (
-                <Folderitem setPageSelected={setPageSelected} setInfoFolder={setInfoFolder} navBarNextRef={navBarNextRef} folderData={folderData} setColorFolder={setColorFolder} key={index} indexColor={index} />
+                <Folderitem setPageSelected={setPageSelected} setInfoFolder={setInfoFolder} navBarNextRef={navBarNextRef} folderData={folderData} setColorFolder={setColorFolder} key={index} indexColor={index} _id={folderData._id} />
               ))
             )
           }

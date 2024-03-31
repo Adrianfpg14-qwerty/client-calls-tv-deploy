@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useContext } from 'react'
 import "./Folderitem.css"
 
 // ICONS
@@ -7,49 +7,15 @@ import videoIcon from "../../assets/icons/videoIcon.svg"
 
 import Dropdown from 'react-bootstrap/Dropdown';
 
-
-
-
-let cantImages = 0;
-let cantVideos = 0;
-
-
-
 import backgroundColorsArray from "../../helps/colors.js"
 
+import {deleteFolderFunction} from "../../helps/peticiones.js"
 
+import { AppContext } from "../Provider.jsx"
 
-// let actualColor = "";
+const Folderitem = ({folderData, indexColor, navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, _id}) => {
 
-// const contador = (data) => {
-//   data.files.forEach((e) => {
-//     console.log(e)
-//     if(e.type == "img") {
-//       // setCantImages(cantImages => cantImages + 1);
-//       cantImages++;
-//     } else if(e.type == "vid") {
-//       // setCantVideos(cantVideos => cantVideos + 1);
-//       cantVideos++;
-//     }
-//   });
-
-  // console.log(cantImages)
-  // console.log(cantVideos)
-// }
-
-const Folderitem = ({folderData, indexColor, navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, handleDoAgain}) => {
-
-
-  const [cantImages, setCantImages] = useState(0)
-  const handleContadorImages = () => {
-    setCantImages(cantImages => cantImages + 1)
-  }
-
-  const [cantVideos, setCantVideos] = useState(0)
-  const handleContadorVideos = () => {
-    setCantVideos(cantVideos => cantVideos + 1)
-  }
-
+  const [state, setState] = useContext(AppContext)
 
   const [editNameState, setEditNameState] = useState(false);
   // const [nameFolderState, setNameFolderState] = useState("");
@@ -64,17 +30,22 @@ const Folderitem = ({folderData, indexColor, navBarNextRef, setPageSelected, set
 
 
   const [deleteFolderState, setDeleteFolderState] = useState(false);
-  const deleteFolder = () => {
-    alert("delete folder");
+  const deleteFolder = async () => {
+
+    const response = await deleteFolderFunction(_id);
+
+    if(response) {
+      console.log("DELETE: [success] delete folder");
+      setState({doOnce : true, estado : true})
+    } else {
+      console.log("DELETE: [failed] delete folder:" + response);
+    }
 
     setDeleteFolderState(!deleteFolderState)
   }
   const handleDeleteFolder = () => {
     deleteFolder();
   }
-
-
-
 
 
 
@@ -85,7 +56,6 @@ const Folderitem = ({folderData, indexColor, navBarNextRef, setPageSelected, set
     setInfoFolder(folderData)
 
     setColorFolder(folderItemHeaderRef.current.style.backgroundColor);
-    // console.log(folderItemHeaderRef.current.style.backgroundColor)
   }
 
   let finalName;
@@ -111,17 +81,6 @@ const Folderitem = ({folderData, indexColor, navBarNextRef, setPageSelected, set
 
     
   }, []);
-
-
-
-
-  // const getCantImages = () => {
-  //   return cantImages;
-  // }
-
-  // const getCantVideos = () => {
-  //   return cantVideos;
-  // }
 
   const [contVideos, setContVideos] = useState(0)
   const [contImages, setContImages] = useState(0)

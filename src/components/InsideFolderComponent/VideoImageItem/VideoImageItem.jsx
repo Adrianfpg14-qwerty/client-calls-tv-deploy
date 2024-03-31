@@ -45,14 +45,14 @@ const VideoImageItem = ({item}) => {
           <>
             {/* <img src={item.source} className='thumbnail' onClick={() => setOpenModal(true)}/> */}
             <img src={item.thumbnail} className='thumbnail' onClick={() => setOpenModal(true)}/>
-            <img src={imageIcon} className='ubicacionPorPosition' />
+            <img src={imageIcon} className='ubicacionPorPosition ubicacionPorPosition-image' />
           </>
         ) : (
           <>
             {/* <video src={item.source} className='thumbnail' onClick={() => setOpenModal(true)}/> */}
             <img src={item.thumbnail} className='thumbnail' onClick={() => setOpenModal(true)}/>
             {/* <video src={item.thumbnail} className='thumbnail' onClick={() => setOpenModal(true)}/> */}
-            <img src={videoIcon} className='ubicacionPorPosition' />
+            <img src={videoIcon} className='ubicacionPorPosition ubicacionPorPosition-video' />
           </>
           
         )
