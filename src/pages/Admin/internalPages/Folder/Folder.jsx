@@ -5,7 +5,7 @@ import Folderitem from '../../../../components/Folderitem/Folderitem.jsx'
 // import Modal from '../../../../components/Modal/Modal.jsx'
 
 import axios from 'axios'
-import {endpointFolders} from "../../../../api/api.js"
+import {endpointGetFolders} from "../../../../api/api.js"
 
 import { AppContext } from '../../../../components/Provider.jsx'
 
@@ -19,7 +19,7 @@ const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, 
 
   const fetchDataFolders = async () => {
     try {
-      const response = await axios.get(endpointFolders)
+      const response = await axios.get(endpointGetFolders)
       console.log("GET: [success] fetch folders");
       setItems(response.data);
     } catch (error) {

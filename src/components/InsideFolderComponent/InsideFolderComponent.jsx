@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useContext } from 'react'
 
 import { Button, Modal } from 'flowbite-react';
 import "./InsideFolderComponent.css"
@@ -8,19 +8,7 @@ import { v4 as uuidGenerator } from 'uuid';
 import VideoImageItem from "./VideoImageItem/VideoImageItem.jsx"
 import uploadCloud from "../../assets/icons/uploadCloud.png"
 
-// const items = [
-//   {
-//     _id: 123,
-//     name: "montañas",
-//     uploadDate: "",
-//     duration: "",
-//     size: "25 MB",
-//     thumbnail: "",
-//     isAnImage: true,
-//     isAvideo: false,
-//     source: montanhas
-//   }
-// ];
+
 
 
 
@@ -35,13 +23,14 @@ import ContainerPreview from './ContainerPreview/ContainerPreview.jsx';
 import axios from 'axios';
 import {endpointCreateFile} from "../../api/api.js"
 
-import {endpointFolders} from "../../api/api.js"
+import {endpointGetFolders} from "../../api/api.js"
+import { AppContext } from '../Provider.jsx';
 
 
 
 const InsideFolderComponent = ({infoFolder, colorFolder}) => {
 
-  const [blobTemporal, setBlobTemporal] = useState()
+  const [state, setState] = useContext(AppContext)
 
   const [infoItemFolder, setInfoItemFolder] = useState([]) 
   // const [fileToSend, setFileToSend] = useState({})
@@ -49,7 +38,7 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
 
   const fetchDataFolders = async () => {
     try {
-      const response = await axios.get(endpointFolders)
+      const response = await axios.get(endpointGetFolders)
       // console.log("fetch folders done");
 
       const allfolders = response.data;
@@ -69,22 +58,21 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
       headerRef.current.style.backgroundColor = colorFolder;
     }
 
-    // setFileToSendState(null)
-
-    // console.log("fetching folders")
     fetchDataFolders();
   }, []);
   
 
   useEffect(() => {
-    // console.log("infoItemFolder");
-    // console.log(infoItemFolder);
   }, [infoItemFolder])
 
 
+  useEffect(() => {
+    if(state.doOnce && state.estado){
+      setState({doOnce : false, estado : false})
+      fetchDataFolders();  
+    }
+  }, [state])
 
-  // console.log("infoFolder")
-  // console.log(infoFolder)
 
   const [files, setFiles] = useState([])
 
@@ -103,7 +91,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
     try {
       const response = await axios.post(endpointCreateFile, fileToSend)
       console.log("push create-file done");
-      // setInfoItemFolder(response.data);
 
       // setOpenModal(false)
       fetchDataFolders();
@@ -116,22 +103,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
   }
 
 
-
-
-
-
-
-  
-
-
-  
-  // console.log("idBox")
-  // console.log(idBox)
-
-
-  
-  
-  // console.log(infoFolder)
 
   // ----- REF
   // Color header
@@ -244,77 +215,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
 
   
 
-  
-  
-  // const selectingFiles = async () => {
-  //   inputDivRef.current.style.display = "none";
-  //   // containerAddingFilesRef.current.style.height = "500px";
-  //   containerAddingFilesRef.current.style.height = "320px";
-
-
-  //   const filesArray = Array.from(inputRef.current.files)
-
-
-  //   const fileURLs = [];
-    
-  //   filesArray.forEach((file, index) => {
-
-  //     const img = new Image();
-  //     img.src = URL.createObjectURL(file);
-  //     img.onload = () => {
-  //       // Crea un canvas y ajusta sus dimensiones
-  //       const canvas = document.createElement('canvas');
-  //       const ctx = canvas.getContext('2d');
-  //       canvas.width = 100; // Anchura deseada del thumbnail
-  //       canvas.height = 100; // Altura deseada del thumbnail
-    
-  //       // Dibuja la imagen en el canvas, ajustando su tamaño
-  //       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    
-  //       // Convierte el canvas a blob
-  //       canvas.toBlob(blob => {
-  //         console.log("blob")
-  //         console.log(blob)
-
-  //         console.log("what the hell is file")
-  //         console.log(file)
-
-  //         fileURLs.push({
-  //           originalObject: file,
-  //           name: file.name,
-  //           url: URL.createObjectURL(file), // Crea una URL temporal para cada archivo
-  //           thumbnail: blob,
-  //           progress: 0
-  //         })
-         
-  //         if(index == filesArray.length - 1){
-  //           setFiles(fileURLs)
-  //         }
-
-
-
-  //       }, 'image/jpeg', 0.95); // Ajusta el formato y calidad según necesites
-  //     }
-  //   });
-
-  //   const setter = () => {
-
-  //   }
-    
-  //   // setFiles(fileURLs);
-
-    
-
-  //   // const fileURLs = filesArray.map(file => ({
-  //   //   originalObject: file,
-  //   //   name: file.name,
-  //   //   url: URL.createObjectURL(file), // Crea una URL temporal para cada archivo
-  //   //   progress: 0
-  //   // }));
-
-  //   // setFiles(fileURLs);
-  // }
-
   const selectingFiles = async () => {
     inputDivRef.current.style.display = "none";
     containerAddingFilesRef.current.style.height = "320px";
@@ -324,11 +224,12 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
     const promises = filesArray.map(file => {
 
       return new Promise((resolve, reject) => {
+
         const img = new Image();
         img.src = URL.createObjectURL(file);
 
-        console.log("file - newOne")
-        console.log(file)
+        // console.log("file - newOne")
+        // console.log(file)
 
         if(file.type.startsWith("image")){
 
@@ -351,16 +252,15 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
           img.onerror = reject;
 
         } else {
-
           
           const video = document.createElement('video');
-          video.preload = 'metadata';
           video.src = URL.createObjectURL(file);
+          video.preload = 'metadata';
 
-          console.log("llego hasta aquí por lo menos?")
+          // console.log("llego hasta aquí por lo menos?")
 
           video.onloadedmetadata = () => {
-            URL.revokeObjectURL(video.src); // Clean up the URL object
+            // URL.revokeObjectURL(video.src); // Clean up the URL object
             if (video.duration > 0) {
               // Seek to a second of the video to ensure we have a frame
               // video.currentTime = Math.min(Math.max(1, video.duration / 2), video.duration - 1);
@@ -368,11 +268,7 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
             }
           };
 
-          console.log("llego hasta aquí por lo menos? 2")
-
           video.onseeked = () => {
-            
-            console.log("llego hasta aquí por lo menos? 3")
             
             const canvas = document.createElement('canvas');
             canvas.width = 100; // Set thumbnail size
@@ -446,30 +342,20 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
       }, (error) => {
         console.log("Error rey" + error);
       }, () => {
-        // console.log("Success " + file.name);
+        console.log("Success " + file.name);
         
         
         
 
         getDownloadURL(uploadTask.snapshot.ref)
         .then(downloadUrl => {
-            // setUrls(downloadUrl)
-            // setUrls({...urls, url: downloadUrl});
-            // setUrls([...urls, {url: downloadUrl}]);
-            // console.log(downloadUrl)
-            // ENVIAR A BASE DE DATOS
             
-            // console.log("info File")
-            // console.log(file)
-            // console.log(infoFolder)
-            // console.log(infoFolder._id)
-
             
             // SENDING THUMBNAIL
             const nameUuidForThumbnail = uuidGenerator();
             const fileRefForThumbnail = ref(storage, "thumbnails/" + nameUuidForThumbnail);
 
-            console.log(file.thumbnail)
+            // console.log(file.thumbnail)
             const uploadTaskForThumbnail = uploadBytesResumable(fileRefForThumbnail, file.thumbnail);
 
             uploadTaskForThumbnail.on('state_changed', (snapshot) => {
@@ -489,7 +375,7 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
                     thumbnail: downloadUrlForThumbnail
                 }
                 
-                console.log(objectToSend)
+                // console.log(objectToSend)
                 
                 pushCreateFile(objectToSend);
               })
@@ -548,7 +434,7 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
         {
           infoItemFolder.length > 0 && (
             infoItemFolder.map((item, index) => (
-              <VideoImageItem item={item} key={index} />
+              <VideoImageItem item={item} key={index} folderId={infoFolder._id} index={item}/>
             ))
           )
         }

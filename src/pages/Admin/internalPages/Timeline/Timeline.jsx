@@ -51,7 +51,7 @@ const handleDragLeaveOnTemp = () => {
 
 
 import axios from 'axios'
-import {endpointFolders} from "../../../../api/api.js"
+import {endpointGetFolders} from "../../../../api/api.js"
 import {endpointCreateArrayEndpoint} from "../../../../api/api.js"
 import {endpointGetArraySecuenceEndpoint} from "../../../../api/api.js"
 
@@ -72,7 +72,7 @@ const Timeline = ({folders}) => {
 
   const fetchDataFolders = async () => {
     try {
-      const response = await axios.get(endpointFolders)
+      const response = await axios.get(endpointGetFolders)
       console.log("fetch folders done");
       console.log("response.data");
       console.log(response.data);

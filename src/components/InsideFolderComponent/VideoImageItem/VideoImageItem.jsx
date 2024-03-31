@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useRef, useState, useContext} from 'react'
 import "./VideoImageItem.css"
 
 import { Button, Modal } from 'flowbite-react';
@@ -9,15 +9,25 @@ import imageIcon from "../../../assets/icons/imageIcon.png"
 
 import trash from "../../../assets/icons/trash.svg"
 
-const deleteVideo = () => {
-  alert("deleting video")
-}
 
+import {deleteFileFunction} from "../../../helps/peticiones.js"
 
+import { AppContext } from '../../Provider.jsx'
 
-const VideoImageItem = ({item}) => {
+const VideoImageItem = ({item, folderId, index}) => {
+  
+  const [state, setState] = useContext(AppContext)
 
+  const deleteVideo = async () => {
+    const response = await deleteFileFunction(folderId, index._id);
 
+    if(response) {
+      console.log("DELETE: [success] delete file");
+      setState({doOnce : true, estado : true})
+    } else {
+      console.log("DELETE: [failed] delete file:" + response);
+    }
+  }
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -30,7 +40,6 @@ const VideoImageItem = ({item}) => {
     }
   }, [])
 
-  // console.log(item)
   
 
   return (
