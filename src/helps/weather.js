@@ -10,7 +10,7 @@ const getWeather = async (municipio) => {
 
   const options = {
     method: 'GET',
-    url: 'https://weatherapi-com.p.rapidapi.com/current.json',
+    url: 'https://weatherapi-com.p.rapidapi.com',
     params: {q: municipio},
     headers: {
       'X-RapidAPI-Key': import.meta.env.VITE_RapidAPIKey,
