@@ -10,11 +10,11 @@ const getWeather = async (municipio) => {
 
   const options = {
     method: 'GET',
-    url: 'https://weatherapi-com.p.rapidapi.com',
+    url: 'https://weatherapi-com.p.rapidapi.com/current.json',
     params: {q: municipio},
     headers: {
-      'X-RapidAPI-Key': import.meta.env.VITE_RapidAPIKey,
-      'X-RapidAPI-Host': import.meta.env.VITE_RapidAPIHost
+      'X-RapidAPI-Key': '853e9628bcmsh0e1a060d869d672p1d8ff0jsne78730df0064',
+      'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
     }
   };
 
