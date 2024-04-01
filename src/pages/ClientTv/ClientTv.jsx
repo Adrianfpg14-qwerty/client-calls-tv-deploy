@@ -366,8 +366,10 @@ function Clienttv() {
     showCortina();
     
     // if(currentUrlImageVideo.type.startsWith("video")){
-    if(urlVideos[urlIndex].type.startsWith("video") && videoRef.current){
-      videoRef.current.pause();
+    if(urlVideos.length > 0){
+      if(urlVideos[urlIndex].type.startsWith("video") && videoRef.current){
+        videoRef.current.pause();
+      }
     }
 
 
@@ -405,8 +407,10 @@ function Clienttv() {
 
       onNotification = false;
 
-      if(urlVideos[urlIndex].type.startsWith("video") && videoRef.current){
-        videoRef.current.play();
+      if(urlVideos.length > 0 ){
+        if(urlVideos[urlIndex].type.startsWith("video") && videoRef.current){
+          videoRef.current.play();
+        }
       }
       // if(currentUrlImageVideo.type.startsWith("video")){
       //   videoRef.current.play();
@@ -530,18 +534,18 @@ function Clienttv() {
 
 
     
-    socket.on("call-on-tv", (data) => {
-      console.log(data)
+    // socket.on("call-on-tv", (data) => {
+    //   console.log(data)
 
-      setTimeout(()=>{
-        playAudio(data.objeto);
-      }, 1000)
+    //   setTimeout(()=>{
+    //     playAudio(data.objeto);
+    //   }, 1000)
       
-      setCompleteName(data.objetoTexto.name.toUpperCase() + ' ' + data.objetoTexto.surname.toUpperCase());
-      setPlace(data.objetoTexto.place.toUpperCase());
-      showNotification();
+    //   setCompleteName(data.objetoTexto.name.toUpperCase() + ' ' + data.objetoTexto.surname.toUpperCase());
+    //   setPlace(data.objetoTexto.place.toUpperCase());
+    //   showNotification();
     
-    });
+    // });
 
 
     switch(municipio){
@@ -580,6 +584,18 @@ function Clienttv() {
             }
           }
         })
+        socket.on("call-on-tv-riohacha1", (data) => {
+          console.log(data)
+    
+          setTimeout(()=>{
+            playAudio(data.objeto);
+          }, 1000)
+          
+          setCompleteName(data.objetoTexto.name.toUpperCase() + ' ' + data.objetoTexto.surname.toUpperCase());
+          setPlace(data.objetoTexto.place.toUpperCase());
+          showNotification();
+        
+        });
         break;
       case "riohacha2":
         socket.on("sendingVideosRiohacha2", (data) => {
@@ -616,6 +632,18 @@ function Clienttv() {
             }
           }
         })
+        socket.on("call-on-tv-riohacha2", (data) => {
+          console.log(data)
+    
+          setTimeout(()=>{
+            playAudio(data.objeto);
+          }, 1000)
+          
+          setCompleteName(data.objetoTexto.name.toUpperCase() + ' ' + data.objetoTexto.surname.toUpperCase());
+          setPlace(data.objetoTexto.place.toUpperCase());
+          showNotification();
+        
+        });
         break;
       case "riohacha3":
         socket.on("sendingVideosRiohacha3", (data) => {
@@ -652,6 +680,18 @@ function Clienttv() {
             }
           }
         })
+        socket.on("call-on-tv-riohacha3", (data) => {
+          console.log(data)
+    
+          setTimeout(()=>{
+            playAudio(data.objeto);
+          }, 1000)
+          
+          setCompleteName(data.objetoTexto.name.toUpperCase() + ' ' + data.objetoTexto.surname.toUpperCase());
+          setPlace(data.objetoTexto.place.toUpperCase());
+          showNotification();
+        
+        });
         break;
       case "fonseca":
         socket.on("sendingVideosFonseca", (data) => {
@@ -671,6 +711,18 @@ function Clienttv() {
             }
           }
         })
+        socket.on("call-on-tv-fonseca", (data) => {
+          console.log(data)
+    
+          setTimeout(()=>{
+            playAudio(data.objeto);
+          }, 1000)
+          
+          setCompleteName(data.objetoTexto.name.toUpperCase() + ' ' + data.objetoTexto.surname.toUpperCase());
+          setPlace(data.objetoTexto.place.toUpperCase());
+          showNotification();
+        
+        });
         break;
       case "maicao":
         socket.on("sendingVideosMaicao", (data) => {
@@ -690,6 +742,18 @@ function Clienttv() {
             }
           }
         })
+        socket.on("call-on-tv-maicao", (data) => {
+          console.log(data)
+    
+          setTimeout(()=>{
+            playAudio(data.objeto);
+          }, 1000)
+          
+          setCompleteName(data.objetoTexto.name.toUpperCase() + ' ' + data.objetoTexto.surname.toUpperCase());
+          setPlace(data.objetoTexto.place.toUpperCase());
+          showNotification();
+        
+        });
         break; 
     }
 
