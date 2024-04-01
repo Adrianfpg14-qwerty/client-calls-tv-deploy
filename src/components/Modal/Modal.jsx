@@ -5,6 +5,8 @@ import "./Modal.css";
 
 import { AppContext } from "../Provider";
 
+import Swal from "sweetalert2";
+
 const Modal = ({handleCloseModal, createFolder}) => {
 
   const [state, setState] = useContext(AppContext)
@@ -31,6 +33,13 @@ const Modal = ({handleCloseModal, createFolder}) => {
     
     if(response) {
       setState({doOnce : true, estado : true})
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Algo falló!"
+      });
+      console.log(response)
     }
   }
 

@@ -57,7 +57,7 @@ import {endpointGetArraySecuenceEndpoint} from "../../../../api/api.js"
 
 
 
-
+import Swal from 'sweetalert2';
 
 let arrayAuxiliar = [];
 // const arrayTemporal = [];
@@ -73,15 +73,16 @@ const Timeline = ({folders}) => {
   const fetchDataFolders = async () => {
     try {
       const response = await axios.get(endpointGetFolders)
-      console.log("fetch folders done");
-      console.log("response.data");
-      console.log(response.data);
-
-      
+      console.log("GET: [success] fetch folders");
 
       setItems(response.data);
     } catch (error) {
-      console.error('Hubo un error al obtener la carpeta:', error);
+      console.log("GET: [failed] fetch folders:" + error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Algo falló!"
+      });
     }
   }
 

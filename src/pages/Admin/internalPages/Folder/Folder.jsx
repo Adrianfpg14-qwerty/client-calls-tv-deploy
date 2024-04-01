@@ -9,6 +9,7 @@ import {endpointGetFolders} from "../../../../api/api.js"
 
 import { AppContext } from '../../../../components/Provider.jsx'
 
+import Swal from 'sweetalert2'
 
 const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, handleOpenModalOnRoot}) => {
   
@@ -24,6 +25,12 @@ const Folder = ({navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, 
       setItems(response.data);
     } catch (error) {
       console.log("GET: [failed] fetch folders:" + error);
+      
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Algo falló!"
+      });
     }
   }
 

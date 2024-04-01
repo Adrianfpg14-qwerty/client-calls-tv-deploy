@@ -33,7 +33,7 @@ input {
   border: 1px solid #ccc;
 }
 
-button {
+.submitLogin {
   padding: 10px;
   font-size: 16px;
   background-color: #007bff;
@@ -46,7 +46,7 @@ button {
   height: 30px;
 }
 
-button:hover {
+.submitLogin:hover {
   background-color: #0056b3;
   color: white;
   /* width: 20px; */

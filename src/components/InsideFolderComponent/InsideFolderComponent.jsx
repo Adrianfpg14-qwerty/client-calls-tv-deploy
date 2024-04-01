@@ -26,7 +26,7 @@ import {endpointCreateFile} from "../../api/api.js"
 import {endpointGetFolders} from "../../api/api.js"
 import { AppContext } from '../Provider.jsx';
 
-
+import Swal from 'sweetalert2';
 
 const InsideFolderComponent = ({infoFolder, colorFolder}) => {
 
@@ -47,8 +47,17 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
       
       setInfoItemFolder(onlyThisFolder[0].files);
 
+      console.log("GET: [success] fetch folders");
+
     } catch (error) {
-      console.error('Hubo un error al obtener la carpeta:', error);
+      
+      console.log("GET: [failed] fetch folders:" + error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Algo falló!"
+      });
     }
   }
 
@@ -82,12 +91,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
   
   const pushCreateFile = async (fileToSend) => {
     
-    // console.log("fileToSend")
-    // console.log(fileToSend)
-
-    // console.log("endpointCreateFile")
-    // console.log(endpointCreateFile)
-
     try {
       const response = await axios.post(endpointCreateFile, fileToSend)
       console.log("push create-file done");
@@ -115,12 +118,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
   // Input files
   const inputRef = useRef();
   
-  // Buttons
-  const uploadButton = useRef();
-  const cancelBtn = useRef();
-  const finalButton = useRef();
-
-
 
   // ----- STATES
   const [openModal, setOpenModal] = useState(false);
@@ -134,21 +131,15 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
 
   // Buttons states
   const [uploadButtonEnable, setUploadButtonEnable] = useState(true);
+  const [cancelButtonEnable, setCancelButtonEnable] = useState(false);
 
   // Individual Btns
   const [individualEnableBtns, setIndividualEnableBtns] = useState(0);
-
-  // show 2 or 1 button
-  const [groupButtons, setGroupButtons] = useState(true);
-
 
 
   // ------ EFFECTS
 
   useEffect(() => {
-
-    // console.log("files")
-    // console.log(files)
 
     // Revocar URLs cuando el componente se desmonte o cambie el estado
     return () => {
@@ -156,8 +147,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
         files.forEach(file => URL.revokeObjectURL(file.url));
       }
     };
-
-    
 
   }, [files]);
 
@@ -172,7 +161,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
       setFiles([])
 
       setOpenModal(false)
-      setGroupButtons(false);
     }
   }, [contadorVideosUploaded])
 
@@ -186,10 +174,9 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
     setFiles([])
 
     setContadorVideosUploaded(0);
-    setUploadButtonEnable(true)
-    setIndividualEnableBtns(0);
 
-    setGroupButtons(true);
+    setUploadButtonEnable(true)
+    setCancelButtonEnable(false)
   }
 
   const handleSetContador = () => {
@@ -197,13 +184,17 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
   }
 
   const handleuploadVideos = () => {
+
+    setUploadButtonEnable(true)
+    setCancelButtonEnable(true)
+
     uploadVideos();
   }
 
   const handleSelectFiles = () => {
     selectingFiles();
 
-    setUploadButtonEnable(false);
+    setUploadButtonEnable(false)
   }
   
 
@@ -227,9 +218,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
 
         const img = new Image();
         img.src = URL.createObjectURL(file);
-
-        // console.log("file - newOne")
-        // console.log(file)
 
         if(file.type.startsWith("image")){
 
@@ -256,8 +244,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
           const video = document.createElement('video');
           video.src = URL.createObjectURL(file);
           video.preload = 'metadata';
-
-          // console.log("llego hasta aquí por lo menos?")
 
           video.onloadedmetadata = () => {
             // URL.revokeObjectURL(video.src); // Clean up the URL object
@@ -311,24 +297,22 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
     
     if(files.length === 0)  return;
 
-    
     // Uploading videos
     files.forEach((file, index) => {
-      
-      // console.log(file.originalObject)
       
       const nameUuid = uuidGenerator();
       
       // const fileRef = ref(storage, "videos/" + file.name);
       const fileRef = ref(storage, "archivos/" + nameUuid);
-      const uploadTask = uploadBytesResumable(fileRef, file.originalObject);
+
+      const uploadTask = uploadBytesResumable(fileRef, file.originalObject);  
 
       uploadTask.on('state_changed', (snapshot) => {
         let currentProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;				
         currentProgress = Math.trunc(currentProgress);
         // console.log(file.name + ": " + currentProgress);
 
-				setFiles(prevData => {
+        setFiles(prevData => {
             const updatedFiles = [...prevData];
             updatedFiles[index] = { ...updatedFiles[index], progress: currentProgress };
 
@@ -336,20 +320,20 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
           }
         );
 
-        
-
-
       }, (error) => {
-        console.log("Error rey" + error);
+        console.log("Error subiendo" + error);
+
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Algo falló!"
+        });
+
       }, () => {
         console.log("Success " + file.name);
         
-        
-        
-
         getDownloadURL(uploadTask.snapshot.ref)
         .then(downloadUrl => {
-            
             
             // SENDING THUMBNAIL
             const nameUuidForThumbnail = uuidGenerator();
@@ -360,7 +344,12 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
 
             uploadTaskForThumbnail.on('state_changed', (snapshot) => {
             }, (error) => {
-              console.log("error con thumbnails")
+              console.log("error con thumbnails " + error)
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Algo falló!"
+              });
             }, () => {
               getDownloadURL(uploadTaskForThumbnail.snapshot.ref)
               .then(downloadUrlForThumbnail => {
@@ -375,46 +364,12 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
                     thumbnail: downloadUrlForThumbnail
                 }
                 
-                // console.log(objectToSend)
-                
                 pushCreateFile(objectToSend);
               })
             })
-
-            // file.originalObject.size viene en Bytes => pasalo a MBytes
-            // const size = file.originalObject.size/1000000;
-            // const objectToSend = {
-            //     folderId: infoFolder._id,
-            //     name: file.name,
-            //     size: parseFloat(size.toFixed(2)),
-            //     type: file.originalObject.type,
-            //     source: downloadUrl,
-            // }
-
-            
-            // pushCreateFile(objectToSend);
-            
-            
-
-            // ENDPOINT QUE EMITE
-            // axios.post(`${SERVER_URL}/uploadVideoUrl`, {
-            //   url: downloadUrl
-            // })
-            // .then(response => {
-            //   // Aquí manejas la respuesta. Por ejemplo, puedes almacenar un token, navegar a otra página, etc.
-            //   console.log('Respuesta del servidor:', response.data);      
-              
-            //   handleSetContador();
-              
-            // })
-            // .catch(error => {
-            //   // Manejar posibles errores
-            //   console.error('Error en la petición:', error);
-            // });
-
-
         })
       })
+      
     })
   }
 
@@ -458,8 +413,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
                     {
                       files.map( (file, index) => (
                         <ContainerPreview file={file} index={index} key={index} />
-                        // <ContainerPreview file={file} index={index} handleEnableUploadBtn={handleEnableUploadBtn} key={index} />
-                        // <ContainerPreview file={file} index={index} key={index}/>
                       ))
                     }
                   </>
@@ -471,36 +424,19 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
         </Modal.Body>
         <Modal.Footer>
           
-          {
-            groupButtons ? (
-              <>
-                <Button 
-                  onClick={() => handleuploadVideos()} 
-                  disabled={uploadButtonEnable}
-                  ref={uploadButton} 
-                >
-                  Subir
-                </Button>
+          <Button 
+            onClick={() => handleuploadVideos()} 
+            disabled={uploadButtonEnable}
+          >
+            Subir
+          </Button>
 
-                <Button color="gray" 
-                  onClick={handleCancelar} 
-                  ref={cancelBtn}
-                  >
-                  Cancelar
-                </Button>
-              </>
-            ) : (
-              <Button 
-                onClick={handleCancelar} 
-                ref={finalButton} 
-              >
-                Aceptar
-              </Button>
-            )
-
-          }
-          
-         
+          <Button color="gray" 
+            onClick={handleCancelar} 
+            disabled={cancelButtonEnable}
+            >
+            Cancelar
+          </Button>
 
         </Modal.Footer>
       </Modal>

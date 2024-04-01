@@ -74,7 +74,13 @@
   width: 100%;
 }
 
-.folderItemContent img {
+.folderItemContent .imagesIcon {
+  width: 30px;
+  height: 30px;
+  margin: 2.5px;
+}
+
+.folderItemContent .videosIcon {
   width: 35px;
   height: 35px;
 }
@@ -100,3 +106,5 @@
   width: 700px;
   height: 900px;
 }
+
+

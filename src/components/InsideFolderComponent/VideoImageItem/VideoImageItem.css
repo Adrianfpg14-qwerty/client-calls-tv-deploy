@@ -151,14 +151,15 @@
 
 
 .ubicacionPorPosition {
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   
   border-radius: 8px;
   border: 1px solid rgb(7, 7, 7);
 
   position: relative;
-  top: -24px;
+  top: -20px;
+  right: 5px;
   padding: 3px;
 }
 
@@ -167,4 +168,9 @@
 }
 .ubicacionPorPosition-video {
   background-color: rgb(126, 208, 189);
+}
+
+
+.confirmedBtn {
+  margin-right: 20px;
 }

@@ -3,7 +3,7 @@ import "./Folderitem.css"
 
 // ICONS
 import imageIcon from "../../assets/icons/imageIcon.png"
-import videoIcon from "../../assets/icons/videoIcon.svg"
+import videoIcon from "../../assets/icons/videoIcon.png"
 
 import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -12,6 +12,9 @@ import backgroundColorsArray from "../../helps/colors.js"
 import {deleteFolderFunction} from "../../helps/peticiones.js"
 
 import { AppContext } from "../Provider.jsx"
+
+import Swal from 'sweetalert2';
+
 
 const Folderitem = ({folderData, indexColor, navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, _id}) => {
 
@@ -32,16 +35,61 @@ const Folderitem = ({folderData, indexColor, navBarNextRef, setPageSelected, set
   const [deleteFolderState, setDeleteFolderState] = useState(false);
   const deleteFolder = async () => {
 
-    const response = await deleteFolderFunction(_id);
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: true
+    });
+    swalWithBootstrapButtons.fire({
+      title: "Eliminar carpeta",
+      text: "No se puede revertir este cambio",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Si, eliminala",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
 
-    if(response) {
-      console.log("DELETE: [success] delete folder");
-      setState({doOnce : true, estado : true})
-    } else {
-      console.log("DELETE: [failed] delete folder:" + response);
-    }
+        const response = await deleteFolderFunction(_id);
 
-    setDeleteFolderState(!deleteFolderState)
+        if(response) {
+          console.log("DELETE: [success] delete folder");
+          setState({doOnce : true, estado : true})
+
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Eliminada!",
+              text: "Carpeta eliminada.",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Algo falló!"
+          });
+          console.log("DELETE: [failed] delete folder:" + response);
+        }
+
+        setDeleteFolderState(!deleteFolderState)
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        // swalWithBootstrapButtons.fire({
+        //   title: "Cancelado",
+        //   text: "Your imaginary file is safe :)",
+        //   icon: "error"
+        // });
+      }
+    });
   }
   const handleDeleteFolder = () => {
     deleteFolder();

@@ -3,7 +3,7 @@ import "./VideoImageItem.css"
 
 import { Button, Modal } from 'flowbite-react';
 
-import videoIcon from "../../../assets/icons/videoIcon.svg";
+import videoIcon from "../../../assets/icons/videoIcon.png";
 import imageIcon from "../../../assets/icons/imageIcon.png"
 
 
@@ -14,19 +14,70 @@ import {deleteFileFunction} from "../../../helps/peticiones.js"
 
 import { AppContext } from '../../Provider.jsx'
 
+import Swal from 'sweetalert2'
+
+
+
 const VideoImageItem = ({item, folderId, index}) => {
   
   const [state, setState] = useContext(AppContext)
 
-  const deleteVideo = async () => {
-    const response = await deleteFileFunction(folderId, index._id);
+  const deleteVideo = () => {
 
-    if(response) {
-      console.log("DELETE: [success] delete file");
-      setState({doOnce : true, estado : true})
-    } else {
-      console.log("DELETE: [failed] delete file:" + response);
-    }
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: true
+    });
+    swalWithBootstrapButtons.fire({
+      title: "Eliminar archivo",
+      text: "No se puede revertir este cambio",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Si, eliminalo",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+
+        const response = await deleteFileFunction(folderId, index._id);
+
+        if(response) {
+          console.log("DELETE: [success] delete file");
+          setState({doOnce : true, estado : true})
+
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Eliminado!",
+              text: "Tu archivo ha sido eliminado.",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Algo falló!"
+          });
+          console.log("DELETE: [failed] delete file:" + response);
+        }
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        // swalWithBootstrapButtons.fire({
+        //   title: "Cancelado",
+        //   text: "Your imaginary file is safe :)",
+        //   icon: "error"
+        // });
+      }
+    });
+   
   }
 
   const [openModal, setOpenModal] = useState(false);

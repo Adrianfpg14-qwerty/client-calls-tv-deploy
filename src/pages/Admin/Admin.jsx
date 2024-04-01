@@ -26,6 +26,7 @@ import {endpointDeleteFolder} from "../../api/api.js"
 
 import Provider from "../../components/Provider.jsx"
 
+
 const Admin = () => {
   const menuRef = useRef()
   const iconMenuRef = useRef()
@@ -70,12 +71,10 @@ const Admin = () => {
   const createFolder = async (nameFolder) => {
     try {
       const response = await axios.post(endpointCreateFolders, {nameFolder})
-      console.log("POST: [success] create folder");
       handleCloseModalOnRoot();
       return true
     } catch (error) {
-      console.error('POST: [failed] create folder:', error);
-      return false
+      return error
     }
   }
 
@@ -99,6 +98,8 @@ const Admin = () => {
     <Provider >
       <div className="pageContainer no-select">
       
+        <div className={`${showMenu ? "" : "cortinaMenu"}`} onClick={() => handleShowMenu()}></div>
+
         <div className="header">
 
           <div className="leftHeader">
@@ -115,7 +116,7 @@ const Admin = () => {
                 setPageSelected(1)
                 navBarNextRef.current.textContent = ""
               }
-              if(navBarRef.current.textContent == "| Lista"){
+              if(navBarRef.current.textContent == "| Listas"){
                 setPageSelected(2)
                 navBarNextRef.current.textContent = ""
               }
@@ -146,7 +147,7 @@ const Admin = () => {
             </div>
 
             <div className={`itemPage ${(pageSelected === 2 || pageSelected === 5) ? "selected" : ""}`} onClick={() => {handleNavigation(2, "| Linea")} }>
-              <span className="namePage">Lista de reproducción</span>
+              <span className="namePage">Listas de reproducción</span>
               <img src={timeLineIcon} className="iconPage" />
             </div>
 
