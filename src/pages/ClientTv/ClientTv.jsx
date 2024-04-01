@@ -156,19 +156,62 @@ function getHoursMinutes(){
 
 
 
+let doOnce = true;
+
+
+
 function Clienttv() {
 
   const { municipio } = useParams();
   const [ municipioText, setMunicipioText ] = useState()
   const [ temperature, setTemperature ] = useState('')
 
+  // const fetchDataArraySecuence = async () => {
+  //   try {
+  //     const response = await axios.get(endpointGetArraySecuenceEndpoint)
+  //     console.log("GET [success] array secuence");
+  //     console.log(response.data[0].files)
+
+  //     urlVideos = response.data[0].files;
+  //     urlIndex = 0;
+
+  //     if(urlVideos.length == 0) return
+
+  //     setcurrentUrlImageVideo(urlVideos[urlIndex]);
+
+  //   } catch (error) {
+  //     console.log("GET [success] array secuence " + error);
+  //   }
+  // }
+
   const fetchDataArraySecuence = async () => {
     try {
       const response = await axios.get(endpointGetArraySecuenceEndpoint)
-      console.log("fetch array secuence done");
-      console.log(response.data[0].files)
+      console.log("GET [success] array secuence");
 
-      urlVideos = response.data[0].files;
+      switch(municipio){
+        case "riohacha1":
+          urlVideos = response.data[0].files;
+          console.log(response.data[0].files)
+          break;
+        case "riohacha2":
+          urlVideos = response.data[1].files;
+          console.log(response.data[1].files)
+          break;
+        case "riohacha3":
+          urlVideos = response.data[2].files;
+          console.log(response.data[2].files)
+          break;
+        case "fonseca":
+          urlVideos = response.data[3].files;
+          console.log(response.data[3].files)
+          break;
+        case "maicao":
+          urlVideos = response.data[4].files;
+          console.log(response.data[4].files)
+          break; 
+      }
+
       urlIndex = 0;
 
       if(urlVideos.length == 0) return
@@ -176,7 +219,7 @@ function Clienttv() {
       setcurrentUrlImageVideo(urlVideos[urlIndex]);
 
     } catch (error) {
-      console.error('Hubo un error al obtener el array secuence:', error);
+      console.log("GET [success] array secuence " + error);
     }
   }
 
@@ -405,6 +448,12 @@ function Clienttv() {
   function timerFunction () {
     setInterval(()=>{
       
+      let temporalMinuto = new Date().getMinutes()
+      if(temporalMinuto > minutos && doOnce){
+        doOnce = false;
+        console.log("doing")
+      }
+
       setMinutos(GetMinutes());
       setHoras(GetHours());
 
@@ -422,7 +471,7 @@ function Clienttv() {
     if(currentUrlImageVideo == null) return
 
     if(currentUrlImageVideo.type.startsWith("video")){
-      videoRef.current.volume = 0.3;
+      videoRef.current.volume = 0.1;
     } 
 
     if(currentUrlImageVideo.type.startsWith("image")){
@@ -430,7 +479,7 @@ function Clienttv() {
         handleUrlChange();
         // console.log("ejecutandose")
       // }, 10000)      N CANTIDAD DE TIEMPO
-      }, 10000)
+      }, 20000)
     }
   }, [currentUrlImageVideo])
 
@@ -468,6 +517,11 @@ function Clienttv() {
         break; 
     }
 
+
+    
+
+    
+
     fetchDataArraySecuence();
 
     const socket = io(API_URI);
@@ -498,7 +552,157 @@ function Clienttv() {
     
     });
 
-    socket.on("sendingVideos", (data) => {
+
+    switch(municipio){
+      case "riohacha1":
+        socket.on("sendingVideosRiohacha1", (data) => {
+          console.log(data.objeto)
+          urlVideos = data.objeto;
+          urlIndex = 0;
+          
+          if(urlVideos.length == 0) {
+            setcurrentUrlImageVideo(null)
+          } else {
+            setcurrentUrlImageVideo(urlVideos[urlIndex]);
+            if(videoRef.current){
+              if(urlVideos[urlIndex].type.startsWith('video') && urlVideos[urlIndex].source == videoRef.current.src){
+                videoRef.current.currentTime = 0;
+                videoRef.current.play();
+              }
+            }
+          }
+        })
+        socket.on("sendingVideosRiohacha", (data) => {
+          console.log(data.objeto)
+          urlVideos = data.objeto;
+          urlIndex = 0;
+          
+          if(urlVideos.length == 0) {
+            setcurrentUrlImageVideo(null)
+          } else {
+            setcurrentUrlImageVideo(urlVideos[urlIndex]);
+            if(videoRef.current){
+              if(urlVideos[urlIndex].type.startsWith('video') && urlVideos[urlIndex].source == videoRef.current.src){
+                videoRef.current.currentTime = 0;
+                videoRef.current.play();
+              }
+            }
+          }
+        })
+        break;
+      case "riohacha2":
+        socket.on("sendingVideosRiohacha2", (data) => {
+          console.log(data.objeto)
+          urlVideos = data.objeto;
+          urlIndex = 0;
+          
+          if(urlVideos.length == 0) {
+            setcurrentUrlImageVideo(null)
+          } else {
+            setcurrentUrlImageVideo(urlVideos[urlIndex]);
+            if(videoRef.current){
+              if(urlVideos[urlIndex].type.startsWith('video') && urlVideos[urlIndex].source == videoRef.current.src){
+                videoRef.current.currentTime = 0;
+                videoRef.current.play();
+              }
+            }
+          }
+        })
+        socket.on("sendingVideosRiohacha", (data) => {
+          console.log(data.objeto)
+          urlVideos = data.objeto;
+          urlIndex = 0;
+          
+          if(urlVideos.length == 0) {
+            setcurrentUrlImageVideo(null)
+          } else {
+            setcurrentUrlImageVideo(urlVideos[urlIndex]);
+            if(videoRef.current){
+              if(urlVideos[urlIndex].type.startsWith('video') && urlVideos[urlIndex].source == videoRef.current.src){
+                videoRef.current.currentTime = 0;
+                videoRef.current.play();
+              }
+            }
+          }
+        })
+        break;
+      case "riohacha3":
+        socket.on("sendingVideosRiohacha3", (data) => {
+          console.log(data.objeto)
+          urlVideos = data.objeto;
+          urlIndex = 0;
+          
+          if(urlVideos.length == 0) {
+            setcurrentUrlImageVideo(null)
+          } else {
+            setcurrentUrlImageVideo(urlVideos[urlIndex]);
+            if(videoRef.current){
+              if(urlVideos[urlIndex].type.startsWith('video') && urlVideos[urlIndex].source == videoRef.current.src){
+                videoRef.current.currentTime = 0;
+                videoRef.current.play();
+              }
+            }
+          }
+        })
+        socket.on("sendingVideosRiohacha", (data) => {
+          console.log(data.objeto)
+          urlVideos = data.objeto;
+          urlIndex = 0;
+          
+          if(urlVideos.length == 0) {
+            setcurrentUrlImageVideo(null)
+          } else {
+            setcurrentUrlImageVideo(urlVideos[urlIndex]);
+            if(videoRef.current){
+              if(urlVideos[urlIndex].type.startsWith('video') && urlVideos[urlIndex].source == videoRef.current.src){
+                videoRef.current.currentTime = 0;
+                videoRef.current.play();
+              }
+            }
+          }
+        })
+        break;
+      case "fonseca":
+        socket.on("sendingVideosFonseca", (data) => {
+          console.log(data.objeto)
+          urlVideos = data.objeto;
+          urlIndex = 0;
+          
+          if(urlVideos.length == 0) {
+            setcurrentUrlImageVideo(null)
+          } else {
+            setcurrentUrlImageVideo(urlVideos[urlIndex]);
+            if(videoRef.current){
+              if(urlVideos[urlIndex].type.startsWith('video') && urlVideos[urlIndex].source == videoRef.current.src){
+                videoRef.current.currentTime = 0;
+                videoRef.current.play();
+              }
+            }
+          }
+        })
+        break;
+      case "maicao":
+        socket.on("sendingVideosMaicao", (data) => {
+          console.log(data.objeto)
+          urlVideos = data.objeto;
+          urlIndex = 0;
+          
+          if(urlVideos.length == 0) {
+            setcurrentUrlImageVideo(null)
+          } else {
+            setcurrentUrlImageVideo(urlVideos[urlIndex]);
+            if(videoRef.current){
+              if(urlVideos[urlIndex].type.startsWith('video') && urlVideos[urlIndex].source == videoRef.current.src){
+                videoRef.current.currentTime = 0;
+                videoRef.current.play();
+              }
+            }
+          }
+        })
+        break; 
+    }
+
+    socket.on("sendingVideosAll", (data) => {
       console.log(data.objeto)
       urlVideos = data.objeto;
       urlIndex = 0;
