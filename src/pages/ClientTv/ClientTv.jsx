@@ -156,9 +156,6 @@ function getHoursMinutes(){
 
 
 
-let doOnce = true;
-
-
 
 function Clienttv() {
 
@@ -448,12 +445,6 @@ function Clienttv() {
   function timerFunction () {
     setInterval(()=>{
       
-      let temporalMinuto = new Date().getMinutes()
-      if(temporalMinuto > minutos && doOnce){
-        doOnce = false;
-        console.log("doing")
-      }
-
       setMinutos(GetMinutes());
       setHoras(GetHours());
 
@@ -721,8 +712,32 @@ function Clienttv() {
     })
 
     socket.on("updateWeather", () => {
-      getWeatherRiohacha()
-        .then(res => {if(res) setTemperature(res)})
+      switch(municipio){
+        case "riohacha1":
+        case "riohacha2":
+        case "riohacha3":
+          setMunicipioText("Riohacha, La Guajira")
+  
+          getWeatherRiohacha()
+          .then(res => {if(res) setTemperature(res)})
+          
+          break;
+        case "fonseca":
+  
+          setMunicipioText("Fonseca, La Guajira")
+  
+          getWeatherFonseca()
+            .then(res => {if(res) setTemperature(res)})
+            
+          break;
+        case "maicao":
+          setMunicipioText("Maicao, La Guajira")
+  
+          getWeatherMaicao()
+            .then(res => {if(res) setTemperature(res)})
+  
+          break; 
+      }
     })
 
     // Limpieza al desmontar el componente
