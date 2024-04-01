@@ -404,15 +404,9 @@ function Clienttv() {
 
   function timerFunction () {
     setInterval(()=>{
+      
       setMinutos(GetMinutes());
-
-      let temporalHour = new Date().getHours();
-      if(temporalHour > horas){
-        setHoras(GetHours());
-        console.log("changing hour")
-      } else {
-        console.log("not yet")
-      }
+      setHoras(GetHours());
 
       let temporalDay = new Date().getDate();
       if(temporalDay > day){

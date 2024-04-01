@@ -287,12 +287,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
   };
   
 
-
-
-
-  
-
-
   const uploadVideos = () => {
     
     if(files.length === 0)  return;
@@ -302,7 +296,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
       
       const nameUuid = uuidGenerator();
       
-      // const fileRef = ref(storage, "videos/" + file.name);
       const fileRef = ref(storage, "archivos/" + nameUuid);
 
       const uploadTask = uploadBytesResumable(fileRef, file.originalObject);  
@@ -310,7 +303,6 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
       uploadTask.on('state_changed', (snapshot) => {
         let currentProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;				
         currentProgress = Math.trunc(currentProgress);
-        // console.log(file.name + ": " + currentProgress);
 
         setFiles(prevData => {
             const updatedFiles = [...prevData];
@@ -361,7 +353,9 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
                     size: parseFloat(size.toFixed(2)),
                     type: file.originalObject.type,
                     source: downloadUrl,
-                    thumbnail: downloadUrlForThumbnail
+                    thumbnail: downloadUrlForThumbnail,
+                    idArchivoFirebase: nameUuid,
+                    idFileThumbnailFirebase: nameUuidForThumbnail,
                 }
                 
                 pushCreateFile(objectToSend);
@@ -389,7 +383,7 @@ const InsideFolderComponent = ({infoFolder, colorFolder}) => {
         {
           infoItemFolder.length > 0 && (
             infoItemFolder.map((item, index) => (
-              <VideoImageItem item={item} key={index} folderId={infoFolder._id} index={item}/>
+              <VideoImageItem item={item} key={index} folderId={infoFolder._id} />
             ))
           )
         }

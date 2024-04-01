@@ -15,6 +15,9 @@ import { AppContext } from "../Provider.jsx"
 
 import Swal from 'sweetalert2';
 
+import { storage } from "../../services/firebase/firebase.js";
+import { deleteObject, ref } from 'firebase/storage';
+
 
 const Folderitem = ({folderData, indexColor, navBarNextRef, setPageSelected, setInfoFolder, setColorFolder, _id}) => {
 
@@ -29,6 +32,32 @@ const Folderitem = ({folderData, indexColor, navBarNextRef, setPageSelected, set
   }
   const handleEditNameFolder = () => {
     editNameFolder();
+  }
+
+
+  const deleteFileFromFirebase = () => {
+
+    folderData.files.forEach((file) => {
+      const fileRef = ref(storage, "archivos/" + file.idArchivoFirebase);
+      const thumbnailRef = ref(storage, "thumbnails/" + file.idFileThumbnailFirebase);
+    
+      deleteObject(fileRef)
+        .then(() => {
+          console.log('Archivo eliminado correctamente.');
+        })
+        .catch((error) => {
+          console.error('Error al eliminar el archivo:', error);
+        });
+    
+      deleteObject(thumbnailRef)
+        .then(() => {
+          console.log('Archivo eliminado correctamente.');
+        })
+        .catch((error) => {
+          console.error('Error al eliminar el archivo:', error);
+        });
+    })
+
   }
 
 
@@ -60,6 +89,8 @@ const Folderitem = ({folderData, indexColor, navBarNextRef, setPageSelected, set
         if(response) {
           console.log("DELETE: [success] delete folder");
           setState({doOnce : true, estado : true})
+
+          deleteFileFromFirebase()
 
           if (result.isConfirmed) {
             Swal.fire({

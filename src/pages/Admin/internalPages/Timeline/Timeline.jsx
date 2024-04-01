@@ -64,6 +64,54 @@ let arrayAuxiliar = [];
 
 const Timeline = ({folders}) => {
 
+  const [selectedOption, setSelectedOption] = useState('Riohacha - Piso 1');
+
+
+  const handleChange = (event) => {
+    const value = event.target.value;
+    
+    setSelectedOption(value);
+
+    handleCanceltEditionArray()
+
+    switch (value) {
+      case 'Riohacha - Piso 1':
+        fetchDataArraySecuence("Riohacha1")
+        break;
+      case 'Riohacha - Piso 2':
+        fetchDataArraySecuence("Riohacha2")
+        break;
+      case 'Riohacha - Piso 3':
+        fetchDataArraySecuence("Riohacha3")
+        break;
+      case 'Fonseca':
+        fetchDataArraySecuence("Fonseca")
+        break;
+      case 'Maicao':
+        fetchDataArraySecuence("Maicao")
+        break;
+      case 'Riohacha':
+        fetchDataArraySecuence("Riohacha")
+        break;
+      case 'All':
+        fetchDataArraySecuence("All")
+        break;
+      default:
+        break;
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
+
   // const [arrayAuxiliar, setArrayAuxiliar] = useState([]);
   const [arrayTemporal, setArrayTemporal] = useState([]);
 
@@ -89,26 +137,63 @@ const Timeline = ({folders}) => {
 
   
 
-  const fetchDataArraySecuence = async () => {
+  const fetchDataArraySecuence = async (nameSecuence) => {
     try {
       const response = await axios.get(endpointGetArraySecuenceEndpoint)
-      console.log("fetch array secuence done");
+      console.log("GET: [success] fetch secuence");
 
-      setArrayTemporal(response.data[0].files)
-      arrayAuxiliar = response.data[0].files;
-      // setArrayAuxiliar(response.data[0].files)
+      // console.log(response.data)
 
-      console.log("init -----------------")
-      console.log("arrayTemporal")
-      console.log(response.data[0].files)
+      switch (nameSecuence){
+        case "Riohacha1":
+          setArrayTemporal(response.data[0].files)
+          arrayAuxiliar = response.data[0].files;
+          break;
+        case "Riohacha2":
+          setArrayTemporal(response.data[1].files)
+          arrayAuxiliar = response.data[1].files;
+          break;
+        case "Riohacha3":
+          setArrayTemporal(response.data[2].files)
+          arrayAuxiliar = response.data[2].files;
+          break;
+        case "Fonseca":
+          setArrayTemporal(response.data[3].files)
+          arrayAuxiliar = response.data[3].files;
+          break;
+        case "Maicao":
+          setArrayTemporal(response.data[4].files)
+          arrayAuxiliar = response.data[4].files;
+          break;
+        case "Riohacha":
+          // setArrayTemporal(response.data[0].files)
+          // arrayAuxiliar = response.data[0].files;
+          setArrayTemporal([])
+          arrayAuxiliar = [];
+          break;
+        case "All":
+          // setArrayTemporal(response.data[0].files)
+          // arrayAuxiliar = response.data[0].files;
+          setArrayTemporal([])
+          arrayAuxiliar = [];
+          break;
+      }
+
+      // setArrayTemporal(response.data[0].files)
+      // arrayAuxiliar = response.data[0].files;
+      // // setArrayAuxiliar(response.data[0].files)
+
+      // console.log("init -----------------")
+      // console.log("arrayTemporal")
+      // console.log(response.data[0].files)
       
-      console.log("arrayAuxiliar")
-      console.log(arrayAuxiliar)
-      console.log("end -----------------")
+      // console.log("arrayAuxiliar")
+      // console.log(arrayAuxiliar)
+      // console.log("end -----------------")
 
 
     } catch (error) {
-      console.error('Hubo un error al obtener el array secuence:', error);
+      console.log("GET: [failed] fetch secuence " + error);
     }
   }
 
@@ -118,7 +203,7 @@ const Timeline = ({folders}) => {
     fetchDataFolders(); 
 
     // setArrayTemporal([])
-    fetchDataArraySecuence()
+    fetchDataArraySecuence("Riohacha1")
     
     // setSomethingWasDropped(!somethingWasDropped)
 
@@ -129,31 +214,26 @@ const Timeline = ({folders}) => {
 
   const pushUpdateArray = async (arrayToSet) => {
 
-    console.log("push update array")
-
-    console.log("arrayToSet")
-    console.log(arrayToSet)
+    // console.log("push update array")
+    // console.log(arrayToSet)
 
     try {
-      const response = await axios.post(endpointCreateArrayEndpoint, {files: arrayToSet})
-      console.log("push update-new-array done");
-      console.log("response de endpoint: " + response)
-      
-      alert("array de videos/images actualizado")
+      const response = await axios.post(`${endpointCreateArrayEndpoint}/${selectedOption}`, {files: arrayToSet})
+      // const response = await axios.post(endpointCreateArrayEndpoint, {files: arrayToSet})
+      // console.log("response de endpoint: " + response)
+      // console.log("fetching again")
+      if(selectedOption == 'All' || selectedOption == "Riohacha"){
+        fetchDataArraySecuence("Riohacha1")
+        // setSelectedOption('Riohacha - Piso 1');
+      }
 
-      console.log("fetching again")
-      fetchDataArraySecuence();
-
-
+      return true
     } catch (error) {
-      console.error('Hubo un error al actualizar el array:', error);
+      return error
     }
-
-    console.log("after")
-
   }
   
-
+  
 
 
   const aceptarBtnRef = useRef()
@@ -208,7 +288,7 @@ const Timeline = ({folders}) => {
   
 
 
-  const handleSincronizeEditionArray = () => {
+  const handleSincronizeEditionArray = async () => {
     //  console.log("---antes--- (sincronize)")
     
     
@@ -218,12 +298,11 @@ const Timeline = ({folders}) => {
 
 
     //  console.log("hiding")
-    setBtnsHabilitadoState(true)      // EXCELENTE (sincronizado correcto)
-    setBtnsHabilitadoState2(true)
+    
 
 
-    console.log("arrayTemporal ??")
-    console.log(arrayTemporal)
+    // console.log("arrayTemporal ??")
+    // console.log(arrayTemporal)
     arrayAuxiliar = arrayTemporal.map((e) => e);
 
     // console.log("es o no es")
@@ -232,10 +311,41 @@ const Timeline = ({folders}) => {
     // console.log(arrayAuxiliar)
     // setArrayToSet(arrayAuxiliar);
 
-    
 
-    pushUpdateArray(arrayAuxiliar)
-    
+    // console.log("selectedOption")
+    // console.log(selectedOption)
+
+    const result = await pushUpdateArray(arrayAuxiliar)
+
+    if(result) {
+      console.log("POST: [success] array updated");
+      
+      setBtnsHabilitadoState(true)      // EXCELENTE (sincronizado correcto)
+      setBtnsHabilitadoState2(true)
+
+      
+      fetchDataArraySecuence(selectedOption);
+
+      Swal.fire({
+        title: "Actualizada!",
+        text: "Lista actualizada.",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+
+    } else {
+          
+      console.log("POST: [failed] array updated " + result);
+
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Algo falló!"
+      });
+    }
+
   }
 
 
@@ -244,11 +354,11 @@ const Timeline = ({folders}) => {
     //  console.log("---antes--- (delete)")
     
     
-    console.log("indice")
-    console.log(indice)
+    // console.log("indice")
+    // console.log(indice)
     
-    console.log("arrayTemporal")
-    console.log(arrayTemporal)
+    // console.log("arrayTemporal")
+    // console.log(arrayTemporal)
 
     // arrayTemporal.splice(indice, 1)
     let newArray = [...arrayTemporal]
@@ -257,8 +367,8 @@ const Timeline = ({folders}) => {
     // setArrayTemporal(arrayTemporal.splice(indice, 1))
     setArrayTemporal(newArray)
 
-    console.log("newArray")
-    console.log(newArray)
+    // console.log("newArray")
+    // console.log(newArray)
 
     // setSomethingWasDropped(!somethingWasDropped)
 
@@ -446,8 +556,21 @@ const Timeline = ({folders}) => {
 
       <section className="line-selectFiles">
         <div className='carpetasHeader line-carpetasHeader'>
-          {/* Linea de tiempo */}
-          Lista de reproducción
+
+          <select className="selectListas" onChange={handleChange} value={selectedOption}>
+            <option value="Riohacha - Piso 1">Riohacha - Piso 1</option>
+            <option value="Riohacha - Piso 2">Riohacha - Piso 2</option>
+            <option value="Riohacha - Piso 3">Riohacha - Piso 3</option>
+            <option value="Fonseca">Fonseca</option>
+            <option value="Maicao">Maicao</option>
+            {/* <hr /> */}
+            <option disabled className='disabledOption'>────────────────</option>
+            <option value="Riohacha">Todo Riohacha</option>
+            {/* <hr /> */}
+            <option disabled className='disabledOption'>────────────────</option>
+            <option value="All">Todas las sedes</option>
+          </select>
+
         </div>
         <div className='folderContenedor line-folderContenedor'
           onDragOver={(e) => handleDragOverEnterOnTemp(e)}

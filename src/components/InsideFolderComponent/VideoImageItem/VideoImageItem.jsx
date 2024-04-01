@@ -16,13 +16,40 @@ import { AppContext } from '../../Provider.jsx'
 
 import Swal from 'sweetalert2'
 
+import { storage } from "../../../services/firebase/firebase.js";
+import { deleteObject, ref } from 'firebase/storage';
 
 
-const VideoImageItem = ({item, folderId, index}) => {
+
+
+
+const VideoImageItem = ({item, folderId}) => {
   
   const [state, setState] = useContext(AppContext)
 
-  const deleteVideo = () => {
+  const deleteFileFromFirebase = () => {
+
+    const fileRef = ref(storage, "archivos/" + item.idArchivoFirebase);
+    const thumbnailRef = ref(storage, "thumbnails/" + item.idFileThumbnailFirebase);
+  
+    deleteObject(fileRef)
+      .then(() => {
+        console.log('Archivo eliminado correctamente.');
+      })
+      .catch((error) => {
+        console.error('Error al eliminar el archivo:', error);
+      });
+  
+    deleteObject(thumbnailRef)
+      .then(() => {
+        console.log('Archivo eliminado correctamente.');
+      })
+      .catch((error) => {
+        console.error('Error al eliminar el archivo:', error);
+      });
+  }
+
+  const deleteFile = () => {
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -44,11 +71,13 @@ const VideoImageItem = ({item, folderId, index}) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
 
-        const response = await deleteFileFunction(folderId, index._id);
+        const response = await deleteFileFunction(folderId, item._id);
 
         if(response) {
           console.log("DELETE: [success] delete file");
           setState({doOnce : true, estado : true})
+
+          deleteFileFromFirebase()
 
           if (result.isConfirmed) {
             Swal.fire({
@@ -96,7 +125,7 @@ const VideoImageItem = ({item, folderId, index}) => {
   return (
     <div className="videoThumbnailContainer">
       <div className="detailsVideo"></div>
-      <img src={trash} className="trashIcon" onClick={() => deleteVideo()}/>
+      <img src={trash} className="trashIcon" onClick={() => deleteFile()}/>
 
       {/* <img src={item.source} className="thumbnail" onClick={() => setOpenModal(true)}/> */}
       {
