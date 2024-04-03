@@ -154,7 +154,7 @@ function getHoursMinutes(){
   let urlVideos = []
   let urlIndex = 0;
 
-
+let coneccion;
 
 
 function Clienttv() {
@@ -525,10 +525,16 @@ function Clienttv() {
 
     socket.on('connect', () => {
       console.log("Conectado");
+      
+      if(coneccion == false){
+        fetchDataArraySecuence();
+        coneccion = true;
+      }
     });
 
     socket.on('disconnect', () => {
       console.log("Server desconectado");
+      coneccion = false;
     });
 
 
