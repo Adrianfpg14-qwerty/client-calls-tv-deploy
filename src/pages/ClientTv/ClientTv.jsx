@@ -115,15 +115,33 @@ function getHoursMinutes(){
 
 
 
+  // OLD
+  // const convertToAudio = (data) => {
+  //   const blob = new Blob([data], { type: 'audio/mp3' }); // Crea un Blob con los datos de la respuesta
+  //   const url = URL.createObjectURL(blob);                // Crea una URL para el Blob
+  //   const audio = new Audio(url);                         // Crea un elemento de audio con esa URLr
+  //   return audio;
+  // }
+
+  // NEW
+  let blob
+  let url
+  let audio
 
   const convertToAudio = (data) => {
-    const blob = new Blob([data], { type: 'audio/mp3' }); // Crea un Blob con los datos de la respuesta
-    const url = URL.createObjectURL(blob);                // Crea una URL para el Blob
-    const audio = new Audio(url);                         // Crea un elemento de audio con esa URLr
+    blob = new Blob([data], { type: 'audio/mp3' }); // Crea un Blob con los datos de la respuesta
+    url = URL.createObjectURL(blob);                // Crea una URL para el Blob
+    audio = new Audio(url);                         // Crea un elemento de audio con esa URLr
     return audio;
   }
 
+
   let playOrNot = true;
+
+  // NEW
+  let miAudio
+  let miAudio2
+
   const playAudio = async (data) => {
     
     if(!playOrNot) {
@@ -135,12 +153,18 @@ function getHoursMinutes(){
     }
 
     playOrNot = false;
-    const audio = await convertToAudio(data);
-    const audio2 =  await convertToAudio(data);
-    audio.play();
+    // OLD
+    // const miAudio = await convertToAudio(data);
+    // const miAudio2 =  await convertToAudio(data);
+
+    // NEW
+    miAudio = await convertToAudio(data);
+    miAudio2 = await convertToAudio(data);
+
+    miAudio.play();
     
     setTimeout(()=> {
-      audio2.play();
+      miAudio2.play();
     }, 5000)
     
     setTimeout(()=> {
@@ -151,10 +175,18 @@ function getHoursMinutes(){
 
 
 
-  let urlVideos = []
-  let urlIndex = 0;
+let urlVideos = []
+let urlIndex = 0;
 
 let coneccion;
+
+
+// NEW
+let response = []
+
+let urlOn_ShowNotification
+let audioOn_ShowNotification
+
 
 
 function Clienttv() {
@@ -183,8 +215,15 @@ function Clienttv() {
 
   const fetchDataArraySecuence = async () => {
     try {
-      const response = await axios.get(endpointGetArraySecuenceEndpoint)
+      // OLD
+      // const response = await axios.get(endpointGetArraySecuenceEndpoint)
+
+      // NEW
+      response = await axios.get(endpointGetArraySecuenceEndpoint)
+
       console.log("GET [success] array secuence");
+      console.log("response:")
+      console.log(response)
 
       switch(municipio){
         case "riohacha1":
@@ -221,8 +260,8 @@ function Clienttv() {
   }
 
 
- 
- 
+
+
 
 
   // ---------------------------- HOOKS ----------------------------
@@ -287,10 +326,17 @@ function Clienttv() {
 
       // dispararAnimacion()
   
-      const beforeArray = [...urlVideos]
+      // BEFORE
+      // const beforeArray = [...urlVideos]
+
       // setTimeout(() => {
         let conteo = 0;
-        beforeArray.forEach((element, index) => {
+
+        // BEFORE
+        // beforeArray.forEach((element, index) => {
+
+        // NEW
+        [...urlVideos].forEach((element, index) => {
           if(element.source == urlVideos[index].source){
             conteo += 1
           }
@@ -318,6 +364,7 @@ function Clienttv() {
 
   function handlePlay () {
       // terminar transicion
+      console.log("playing")
   };
   function handleEnd () {
       // console.log("Ending video");
@@ -327,7 +374,7 @@ function Clienttv() {
       //     videoRef.current.play()
       //   }
       // }
-
+      console.log("ending")
       handleUrlChange();
   };
 
@@ -353,10 +400,16 @@ function Clienttv() {
       .then(response => response.blob())
       .then(blob => {
         // Crear una URL para el Blob
-        const url = URL.createObjectURL(blob);
+        // OLD
+        // const url = URL.createObjectURL(blob);
+
+        // NEW
+        urlOn_ShowNotification = URL.createObjectURL(blob);
         
         // Paso 4: Reproducir el archivo MP3
-        const audio = new Audio(url);
+        // OLD
+        // const audio = new Audio(url);
+        audioOn_ShowNotification = new Audio(urlOn_ShowNotification);
         audio.play()
       .catch(error => console.error('Error al reproducir el audio:', error));
       
@@ -461,12 +514,43 @@ function Clienttv() {
   
 
   
+  // OLD
+  // useEffect(() => {
+  //   if(currentUrlImageVideo == null) return
 
+  //   if(currentUrlImageVideo.type.startsWith("video")){
+  //     videoRef.current.volume = 0.1;
+  //   } 
+
+  //   if(currentUrlImageVideo.type.startsWith("image")){
+  //     setTimeout(() => {
+  //       handleUrlChange();
+  //       // console.log("ejecutandose")
+  //     // }, 10000)      N CANTIDAD DE TIEMPO
+  //     }, 20000)
+  //   }
+  // }, [currentUrlImageVideo])
+
+  // NEW
   useEffect(() => {
     if(currentUrlImageVideo == null) return
 
     if(currentUrlImageVideo.type.startsWith("video")){
-      videoRef.current.volume = 0.1;
+
+
+      switch(municipio){
+        case "riohacha1":
+        case "riohacha2":
+        case "riohacha3":
+          videoRef.current.volume = 0.2;
+          break;
+        case "fonseca":
+          videoRef.current.volume = 0.4;
+          break;
+        case "maicao":
+          videoRef.current.volume = 0.4;
+          break; 
+      }
     } 
 
     if(currentUrlImageVideo.type.startsWith("image")){
