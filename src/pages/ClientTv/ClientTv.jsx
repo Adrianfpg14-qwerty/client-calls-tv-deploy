@@ -30,10 +30,18 @@ function GetMinutes () {
   return minutosTemp;
 }
 
+// OLD
+// function GetHours () {
+//   let horasTemp = new Date().getHours();
+//   horasTemp = horasTemp < 10 ? '0' + horasTemp : horasTemp;
+//   return horasTemp;
+// }
+
+// NEW
 function GetHours () {
-  let horasTemp = new Date().getHours();
-  horasTemp = horasTemp < 10 ? '0' + horasTemp : horasTemp;
-  return horasTemp;
+  horasTempOn_GetHours = new Date().getHours();
+  horasTempOn_GetHours = horasTempOn_GetHours < 10 ? '0' + horasTempOn_GetHours : horasTempOn_GetHours;
+  return horasTempOn_GetHours;
 }
 
 function getHoursMinutes(){
@@ -186,6 +194,10 @@ let response = []
 
 let urlOn_ShowNotification
 let audioOn_ShowNotification
+let conteoOn_handleUrlChange
+let beforeArrayOn_handleUrlChange
+
+let horasTempOn_GetHours
 
 
 
@@ -326,19 +338,28 @@ function Clienttv() {
 
       // dispararAnimacion()
   
-      // BEFORE
+      // OLD
       // const beforeArray = [...urlVideos]
 
+      // NEW
+      beforeArrayOn_handleUrlChange = [...urlVideos]
+
       // setTimeout(() => {
-        let conteo = 0;
+        // OLD
+        // let conteo = 0;
+        conteoOn_handleUrlChange = 0
 
         // BEFORE
         // beforeArray.forEach((element, index) => {
 
         // NEW
-        [...urlVideos].forEach((element, index) => {
+        beforeArrayOn_handleUrlChange.forEach((element, index) => {
           if(element.source == urlVideos[index].source){
-            conteo += 1
+            // OLD
+            // conteo += 1
+
+            // NEW
+            conteoOn_handleUrlChange += 1
           }
         })
 
@@ -348,7 +369,11 @@ function Clienttv() {
             videoRef.current.pause();
           }
         }else {
-          if(conteo == urlVideos.length){
+          // OLD
+          // if(conteo == urlVideos.length){
+
+          // NEW
+          if(conteoOn_handleUrlChange == urlVideos.length){
             setcurrentUrlImageVideo(urlVideos[urlIndex])
             // console.log("is it?")
           }
@@ -410,7 +435,11 @@ function Clienttv() {
         // OLD
         // const audio = new Audio(url);
         audioOn_ShowNotification = new Audio(urlOn_ShowNotification);
-        audio.play()
+        
+        // OLD
+        // audio.play()
+        // NEW
+        audioOn_ShowNotification.play()
       .catch(error => console.error('Error al reproducir el audio:', error));
       
       });
@@ -488,15 +517,23 @@ function Clienttv() {
     timerFunction();
   }, (waitSeconds * 1000));
   
+  // OLD
+  // function updateDate () {
+  //   const diaDelMes = new Date().getDate()
+  //   setDay(diaDelMes)
+  
+  //   const diaDeSemana = new Date().getDay();   
+  //   setDayOfTheWeek(diasDeLaSemana[diaDeSemana])  
+  
+  //   const mesDelAnho = new Date().getMonth();
+  //   setMonth(diasDeLaSemana[mesesDelAnho[mesDelAnho]]);
+  // }
+
+  // NEW
   function updateDate () {
-    const diaDelMes = new Date().getDate()
-    setDay(diaDelMes)
-  
-    const diaDeSemana = new Date().getDay();   
-    setDayOfTheWeek(diasDeLaSemana[diaDeSemana])  
-  
-    const mesDelAnho = new Date().getMonth();
-    setMonth(diasDeLaSemana[mesesDelAnho[mesDelAnho]]);
+    setDay(new Date().getDate())
+    setDayOfTheWeek(diasDeLaSemana[new Date().getDay()])  
+    setMonth(diasDeLaSemana[mesesDelAnho[new Date().getMonth()]]);
   }
 
   function timerFunction () {
@@ -505,10 +542,17 @@ function Clienttv() {
       setMinutos(GetMinutes());
       setHoras(GetHours());
 
-      let temporalDay = new Date().getDate();
-      if(temporalDay > day){
+      // OLD
+      // let temporalDay = new Date().getDate();
+      // if(temporalDay > day){
+      //   updateDate();
+      // }
+
+      // NEW
+      if(new Date().getDate() > day){
         updateDate();
       }
+
     }, (60 * 1000))
   }
   
